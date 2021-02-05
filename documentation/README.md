@@ -1,2 +1,2 @@
 # csc-307
-![image](./Use-Cases(1).png)
+![image](./documentation/Use-Cases(1).png)
