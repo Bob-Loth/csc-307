@@ -21,7 +21,11 @@ function Login() {
         //once login button is clicked, send the fields to the backend and do
         //something with the response
         axios.post(login_url_string,{'name': values.username, 'pwd': values.password})
-          .then( (resp) => console.log(resp));
+          .then( (resp) => {
+              console.log(resp.data)
+              setErrors(resp.data.errors)
+          })
+
     }
 
     return (
