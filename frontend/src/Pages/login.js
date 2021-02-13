@@ -8,6 +8,7 @@ import axios from 'axios'
 function Login() {
 
     const login_url_string = "http://localhost:5000/login";
+    // eslint-disable-next-line no-unused-vars
     const [errors, setErrors] = useState({})
 
     const initialState = {
