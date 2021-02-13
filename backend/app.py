@@ -18,8 +18,6 @@ def login():
     if request.method == 'POST':
         name = request.get_json().get('name')
         passwd = request.get_json().get('pwd')
-
-
         # TODO: do password encryption here before sending to database
         # TODO: check if hashed password matches user in collection 'users'
         # if not, return response indicating unsuccessful login
