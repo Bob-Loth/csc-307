@@ -41,14 +41,18 @@ def login():
 def register():
     if request.method == 'POST':
         name = request.get_json().get('name')
-        hash = encrypt(request.get_json().get('pwd'))
+        pwd = request.get_json().get('pwd')
 
-        new_user = Register(request.get_json())
-        if new_user.register_user(name, hash):
-            resp = jsonify(success=True)
+        errors = verify_password(name, pwd)
+        if not errors:
+            new_user = Register(request.get_json())
+            if new_user.register_user(name, encrypt(pwd)):
+                resp = jsonify(success=True, errors=errors)
+            else:
+                resp = jsonify(success=False, errors=errors)
+            return resp
         else:
-            resp = jsonify(success=False)
-        return resp
+            return jsonify(success=False, errors=errors)
 
 @app.route('/dashboard', methods=['POST'])
 def dashboard():
