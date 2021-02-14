@@ -3,9 +3,10 @@ import {Form, Button} from 'semantic-ui-react'
 import {useForm} from "../Utils/hooks";
 import axios from 'axios'
 
-function Login() {
 
-    const login_url_string = "http://localhost:5000/login";
+function Register(){
+
+    const register_url_string = "http://localhost:5000/register";
     const [errors, setErrors] = useState({})
 
     const initialState = {
@@ -13,25 +14,25 @@ function Login() {
         password: '',
     }
 
-    const {onChange, onSubmit, values} = useForm(loginUserCallback, initialState)
+    const {onChange, onSubmit, values} = useForm(registerUserCallback, initialState)
 
     function switchPage() {
         console.log("hello");
-        window.location.replace("http://localhost:3000/register");
+        window.location.replace("http://localhost:3000/");
         
     }
 
-    function loginUserCallback() {       
+    function registerUserCallback() {       
         //once login button is clicked, send the fields to the backend and do
         //something with the response
-        axios.post(login_url_string,{'name': values.username, 'pwd': values.password})
+        axios.post(register_url_string,{'name': values.username, 'pwd': values.password})
           .then( (resp) => console.log(resp));
     }
 
     return (
         <div className='form-container'>
-            <Form onSubmit={loginUserCallback} noValidate className=''>
-                <h1> Login </h1>
+            <Form onSubmit={registerUserCallback} noValidate className=''>
+                <h1> Register </h1>
                 <Form.Input
                     label='Username'
                     placeholder='Username...'
@@ -50,10 +51,10 @@ function Login() {
                     onChange={onChange}
                 />
                 <Button type='submit' primary>
-                    Login!
+                    Register
                 </Button>
             </Form>
-            <Button onClick={e => switchPage()}>Register</Button>
+            <Button onClick={e => switchPage()}>Back to Login</Button>
             {Object.keys(errors).length > 0 && (
                 <div className='ui error message'>
                     <ul className='list'>
@@ -65,7 +66,6 @@ function Login() {
             )}
         </div>
     )
-
 }
 
-export default Login
+export default Register
