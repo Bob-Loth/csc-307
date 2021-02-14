@@ -3,6 +3,9 @@ import {Form, Button} from 'semantic-ui-react'
 import {useForm} from "../Utils/hooks";
 import axios from 'axios'
 
+
+
+
 function Login() {
 
     const login_url_string = "http://localhost:5000/login";
@@ -25,7 +28,11 @@ function Login() {
         //once login button is clicked, send the fields to the backend and do
         //something with the response
         axios.post(login_url_string,{'name': values.username, 'pwd': values.password})
-          .then( (resp) => console.log(resp));
+          .then( (resp) => {
+                if (resp.data.success){
+                    window.location.replace("http://localhost:3000/dashboard");
+                }
+            });
     }
 
     return (
