@@ -34,7 +34,6 @@ def login():
         else:
             resp = jsonify(success=False, errors=verify_password(username, password))
         
-        # TODO: return response indicating successful login, redirect
         return resp
 
 @app.route('/register', methods=['POST'])
