@@ -23,10 +23,9 @@ def login():
         #TODO: check if hashed password matches user in collection 'users'
             #if not, return response indicating unsuccessful login
         #TODO: return response indicating successful login, redirect
-        resp = jsonify(username=name, password=passwd)
+
+        resp = jsonify(success= True)
         return resp
-    else:
-    	return redirect(url_for('register'))
 
 
 
@@ -37,3 +36,7 @@ def register():
 		passwd = request.get_json().get('pwd')
 		resp = jsonify(username = name, password = passwd)
 		return resp
+
+@app.route('/dashboard', methods=['POST'])
+def dashboard():
+	return "dashboard"

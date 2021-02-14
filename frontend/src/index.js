@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom'
 import './index.css'
 import Login from "./Pages/login";
 import Register from "./Pages/register";
+import Dashboard from "./Pages/dashboard";
 
 import { 
 	BrowserRouter as Router, 
@@ -20,6 +21,7 @@ class App extends Component {
           		<Switch>
         			<Route exact path="/" component={Login}/>
         			<Route exact path="/register" component={Register}/>
+        			<Route exact path="/dashboard" component={Dashboard}/>
         		</Switch>
 
         	</Router>
