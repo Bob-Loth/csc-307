@@ -2,7 +2,8 @@ from flask import Flask
 from flask import request
 from flask import jsonify
 from flask_cors import CORS
-from utils.Verification import verify_password
+
+
 
 app = Flask(__name__)
 CORS(app)
@@ -12,15 +13,27 @@ CORS(app)
 def home():
     return "Home"
 
-
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
         name = request.get_json().get('name')
         passwd = request.get_json().get('pwd')
-        # TODO: do password encryption here before sending to database
-        # TODO: check if hashed password matches user in collection 'users'
-        # if not, return response indicating unsuccessful login
-        # TODO: return response indicating successful login, redirect
-        resp = jsonify(username=name, password=passwd, errors=verify_password(name, passwd))
+        
+        #TODO: do password encryption here before sending to database
+        #TODO: check if hashed password matches user in collection 'users'
+            #if not, return response indicating unsuccessful login
+        #TODO: return response indicating successful login, redirect
+        resp = jsonify(username=name, password=passwd)
         return resp
+    else:
+    	return redirect(url_for('register'))
+
+
+
+@app.route('/register', methods=['POST'])
+def register():
+	if request.method == 'POST':
+		name = request.get_json().get('name')
+		passwd = request.get_json().get('pwd')
+		resp = jsonify(username = name, password = passwd)
+		return resp
