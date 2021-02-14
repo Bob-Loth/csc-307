@@ -71,3 +71,19 @@ class Login(Model):
         else:
             #app.logger.errors("User does not exist")
             return False
+
+class Register(Model):
+    db_client = pymongo.MongoClient(credentials(), 27017)
+    collection = db_client["InventoryDB"]["users"]
+
+    def register_user(self, user, hash):
+        dup_users = list(self.collection.find({"username":str(user)}))
+        if len(dup_users) != 0:
+            #app.logger.errors("User " + str(user) + " already registered")
+            return False
+        else:
+            #db_ret is the _id field of the registered user
+            db_ret = self.collection.insert_one({"username":user, "password":hash})
+            return True
+
+        
