@@ -7,10 +7,8 @@ from model_mongodb import *
 from hash import *
 from utils.Verification import verify_password
 
-
 app = Flask(__name__)
 CORS(app)
- 
 
 @app.route('/')
 def home():
@@ -24,9 +22,6 @@ def login():
         password = login_attempt.get('pwd')
         login = Login(login_attempt)
         
-        # TODO: do password encryption here before sending to database
-        # TODO: check if hashed password matches user in collection 'users'
-        # if not, return response indicating unsuccessful login
         db_hash = login.find_name_ret_hash(username)
         if db_hash == False:
             resp = jsonify(success=False, errors=verify_password(username, password))
@@ -41,3 +36,15 @@ def login():
         
         # TODO: return response indicating successful login, redirect
         return resp
+
+@app.route('/register', methods=['POST'])
+def register():
+	if request.method == 'POST':
+		name = request.get_json().get('name')
+		passwd = request.get_json().get('pwd')
+		resp = jsonify(username = name, password = passwd)
+		return resp
+
+@app.route('/dashboard', methods=['POST'])
+def dashboard():
+	return "dashboard"
