@@ -14,6 +14,7 @@ CORS(app)
 def home():
     return "Home"
 
+
 @app.route('/login', methods=['POST'])
 def login():
     if request.method == 'POST':
@@ -52,3 +53,4 @@ def register():
 @app.route('/dashboard', methods=['POST'])
 def dashboard():
 	return "dashboard"
+
