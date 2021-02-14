@@ -2,7 +2,6 @@ import pymongo
 from bson import ObjectId
 from private_credentials import credentials
 
-
 class Model(dict):
     """
     A simple model that wraps mongodb document
@@ -16,13 +15,13 @@ class Model(dict):
             self.collection.insert(self)
         else:
             self.collection.update(
-                {"_id": ObjectId(self._id)}, self)
+                { "_id": ObjectId(self._id) }, self)
         self._id = str(self._id)
 
     def reload(self):
         if self._id:
             result = self.collection.find_one({"_id": ObjectId(self._id)})
-            if result:
+            if result :
                 self.update(result)
                 self._id = str(self._id)
                 return True
@@ -33,7 +32,6 @@ class Model(dict):
             resp = self.collection.remove({"_id": ObjectId(self._id)})
             self.clear()
             return resp
-
 
 class User(Model):
     db_client = pymongo.MongoClient('localhost', 27017)
@@ -46,7 +44,7 @@ class User(Model):
         return users
 
     def find_by_name_job(self, name, job):
-        users = list(self.collection.find({"name": name, "job": job}))
+        users = list(self.collection.find({"name": name,"job" : job}))
         for user in users:
             user["_id"] = str(user["_id"])
         return users
@@ -56,7 +54,6 @@ class User(Model):
         for user in users:
             user["_id"] = str(user["_id"])
         return users
-
 
 class Login(Model):
     db_client = pymongo.MongoClient(credentials(), 27017)
@@ -69,8 +66,8 @@ class Login(Model):
         if len(users) == 1:
             return users[0]["password"]
         elif len(users) > 1:
-            # app.logger.errors("Multiple users with same information")
+            #app.logger.errors("Multiple users with same information")
             return False
         else:
-            # app.logger.errors("User does not exist")
+            #app.logger.errors("User does not exist")
             return False

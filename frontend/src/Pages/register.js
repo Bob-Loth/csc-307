@@ -55,7 +55,7 @@ function Register(){
                     Register
                 </Button>
             </Form>
-            <Button onClick={e => switchPage()}>Back to Login</Button>
+            <Button onClick={() => switchPage()}>Back to Login</Button>
             {Object.keys(errors).length > 0 && (
                 <div className='ui error message'>
                     <ul className='list'>
