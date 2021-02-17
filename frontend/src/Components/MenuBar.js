@@ -32,11 +32,11 @@ function MenuBar() {
                 to='/dashboard'
             />
             <Menu.Item
-                name='PlaceHolder1'
-                active={activeItem === 'PlaceHolder1'}
+                name='Search/Filter'
+                active={activeItem === 'Search/Filter'}
                 onClick={handleItemClick}
                 as={Link}
-                to='/placeholder'
+                to='/search'
             />
             <Menu.Menu position='right'>
                 <Menu.Item
