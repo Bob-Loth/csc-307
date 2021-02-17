@@ -61,7 +61,6 @@ def register():
 def dashboard():
     return "dashboard"
 
-
 @app.route('/search', methods=['GET'])
 def search():
     if request.method == 'GET':
@@ -69,4 +68,3 @@ def search():
         products = productdb.list_all()
         app.logger.info(products)
         return jsonify(products=products)
-    return "search"

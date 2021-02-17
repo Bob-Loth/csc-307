@@ -1,5 +1,7 @@
 /* eslint-disable no-unused-vars */
-import {Button, Table, TableBody, Header, Rating} from 'semantic-ui-react'
+import _ from 'lodash'
+import {Table} from 'semantic-ui-react'
+
 import axios from 'axios'
 import React, {useEffect, useReducer, useState} from 'react'
 
@@ -7,9 +9,9 @@ import _ from 'lodash'
 
 
 
-function SearchFilter() {
 
     const search_url_string = "http://localhost:5000/search";
+
 
     const [productList, setProductList] = useState([])
     function reducer(state, action) {
@@ -47,6 +49,7 @@ function SearchFilter() {
         direction: null})
     
     const { column, direction } = state;
+
     return (
         <div>
             {console.log(productList)}
@@ -103,4 +106,4 @@ function SearchFilter() {
 
 }
 
-export default SearchFilter
+export default TableExampleSortable
