@@ -63,5 +63,5 @@ def dashboard():
 
 
 @app.route('/search', methods=['POST'])
-def dashboard():
+def search():
     return "search"
