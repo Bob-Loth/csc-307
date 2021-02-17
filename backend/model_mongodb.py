@@ -89,3 +89,20 @@ class Register(Model):
             # db_ret is the _id field of the registered user
             db_ret = self.collection.insert_one({"username": user, "password": hash})
             return True
+
+class Product(Model):
+    db_client = pymongo.MongoClient(credentials(), 27017)
+    collection = db_client["InventoryDB"]["InventoryColl"]
+
+    def list_all(self):
+        products = list(self.collection.find())
+        for product in products:
+            product["_id"] = str(product["_id"])
+        return products
+
+    # returns a list of products in filter_category that match filter_item
+    def list_filter(self, filter_category, filter_item):
+        filter_category = str(filter_category)
+        products = list(self.collection.find({filter_category: filter_item}))
+        return products
+
