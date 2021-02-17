@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, {useContext, useState} from 'react'
 import {Menu} from 'semantic-ui-react'
 import {Link} from "react-router-dom";
@@ -40,13 +39,6 @@ function MenuBar() {
                 to='/placeholder'
             />
             <Menu.Menu position='right'>
-                <Menu.Item
-                    name='login'
-                    active={activeItem === 'login'}
-                    onClick={handleItemClick}
-                    as={Link}
-                    to='/login'
-                />
                 <Menu.Item
                     name='register'
                     active={activeItem === 'register'}
