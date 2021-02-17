@@ -10,6 +10,7 @@ from utils.Verification import verify_password
 app = Flask(__name__)
 CORS(app)
 
+
 @app.route('/')
 def home():
     return "Home"
@@ -22,20 +23,21 @@ def login():
         username = login_attempt.get('name')
         password = login_attempt.get('pwd')
         login = Login(login_attempt)
-        
+
         db_hash = login.find_name_ret_hash(username)
         if db_hash == False:
             resp = jsonify(success=False, errors=verify_password(username, password))
             return resp
-        
+
         match = verify(password, db_hash)
-        
+
         if match:
             resp = jsonify(success=True, errors=verify_password(username, password))
         else:
             resp = jsonify(success=False, errors=verify_password(username, password))
-        
+
         return resp
+
 
 @app.route('/register', methods=['POST'])
 def register():
@@ -54,7 +56,12 @@ def register():
         else:
             return jsonify(success=False, errors=errors)
 
+
 @app.route('/dashboard', methods=['POST'])
 def dashboard():
-	return "dashboard"
+    return "dashboard"
 
+
+@app.route('/search', methods=['POST'])
+def dashboard():
+    return "search"
