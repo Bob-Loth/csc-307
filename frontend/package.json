@@ -39,7 +39,12 @@
     ]
   },
   "devDependencies": {
+<<<<<<< Updated upstream
     "eslint": "^7.19.0",
     "eslint-plugin-react": "^7.22.0"
+=======
+    "eslint-plugin-react": "^7.22.0",
+    "react-router-dom": "^5.2.0"
+>>>>>>> Stashed changes
   }
 }
