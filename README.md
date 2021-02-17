@@ -1,2 +1,6 @@
 # csc-307
-![image](./Use-Cases(1).png)
+
+### Use Case Diagram
+![image](./documentation/Use-Cases(1).png)
+### Class Diagram
+![image](documentation/UML-Diagram.png)
