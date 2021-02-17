@@ -25,16 +25,16 @@ function exampleReducer(state, action) {
 }
 
 function TableSorter(props) {
-    const initialState = {
+    const {products} = props;
+    console.log(products);
+    const [state, dispatch] = React.useReducer(exampleReducer, {
         column: null,
-        data: props.products.products,
+        data: products,
         direction: null,
-    }
-
-    const [state, dispatch] = useReducer(exampleReducer, initialState)
-
-    const { column, data, direction } = state
-    console.log(props.products.products)
+    })
+    const { column, data, direction } = state;
+    
+    console.log("props: ", typeof(props));
     return (
         <Table sortable celled fixed>
             <Table.Header>
