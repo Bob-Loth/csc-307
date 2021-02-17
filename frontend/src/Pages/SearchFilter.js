@@ -5,49 +5,48 @@ import React, {useEffect, useReducer, useState} from 'react'
 
 import _ from 'lodash'
 
-function exampleReducer(state, action) {
-  switch (action.type) {
-      case 'CHANGE_SORT':
-          if (state.column === action.column) {
-              return {
-                  ...state,
-                  data: state.data.slice().reverse(),
-                  direction:
-                      state.direction === 'ascending' ? 'descending' : 'ascending',
-              }
-          }
 
-          return {
-              column: action.column,
-              data: _.sortBy(state.data, [action.column]),
-              direction: 'ascending',
-          }
-      default:
-          throw new Error()
-  }
-}
 
 function SearchFilter() {
 
-    const login_url_string = "http://localhost:5000/search";
+    const search_url_string = "http://localhost:5000/search";
 
     const [productList, setProductList] = useState([])
-
+    function reducer(state, action) {
+      switch (action.type) {
+          case 'CHANGE_SORT':
+              if (state.column === action.column) {
+                  setProductList(productList.slice().reverse())
+                  return {
+                      ...state,
+                      direction:
+                          state.direction === 'ascending' ? 'descending' : 'ascending',
+                  }
+              }
+              else {
+                  setProductList(_.sortBy(productList, [action.column]));
+                  return {
+                      ...state,
+                      column: action.column,
+                      direction: 'ascending',
+                  }}
+          default:
+              throw new Error()
+    }
+  }
     useEffect(() => {
-        axios.get(login_url_string)
+        axios.get(search_url_string)
             .then(res => {
                 setProductList(res.data.products);
-                //console.log("string here:");
                 //console.log(res.data.products[0].name);
             })
     }, [])
-
-    const [state, dispatch] = React.useReducer(exampleReducer, {
-      column: null,
-      data: productList,
-      direction: null,
-  })
-  const { column, data, direction } = state;
+    
+    const [state, dispatch] = React.useReducer(reducer, 
+      { column: null, 
+        direction: null})
+    
+    const { column, direction } = state;
     return (
         <div>
             {console.log(productList)}
