@@ -6,7 +6,6 @@ import 'semantic-ui-css/semantic.min.css'
 function MenuBar() {
 
 
-    // const { user, logout } = useContext(AuthContext)
 
     const pathname = window.location.pathname
     const path = pathname === '/' ? 'home' : pathname.substr(1)
