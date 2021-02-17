@@ -1,38 +1,10 @@
-import React, {useEffect, useReducer, useState} from 'react'
-import { Table } from 'semantic-ui-react'
-import _ from 'lodash'
 
-function exampleReducer(state, action) {
-    switch (action.type) {
-        case 'CHANGE_SORT':
-            if (state.column === action.column) {
-                return {
-                    ...state,
-                    data: state.data.slice().reverse(),
-                    direction:
-                        state.direction === 'ascending' ? 'descending' : 'ascending',
-                }
-            }
 
-            return {
-                column: action.column,
-                data: _.sortBy(state.data, [action.column]),
-                direction: 'ascending',
-            }
-        default:
-            throw new Error()
-    }
-}
+
 
 function TableSorter(props) {
-    const {products} = props;
-    console.log(products);
-    const [state, dispatch] = React.useReducer(exampleReducer, {
-        column: null,
-        data: products,
-        direction: null,
-    })
-    const { column, data, direction } = state;
+    
+    
     
     console.log("props: ", typeof(props));
     return (
