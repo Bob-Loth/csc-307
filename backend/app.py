@@ -61,7 +61,10 @@ def register():
 def dashboard():
     return "dashboard"
 
-
-@app.route('/search', methods=['POST'])
+@app.route('/search', methods=['GET'])
 def search():
-    return "search"
+    if request.method == 'GET':
+        productdb = Product()
+        products = productdb.list_all()
+        app.logger.info(products)
+        return jsonify(products=products)
