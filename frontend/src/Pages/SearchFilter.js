@@ -3,6 +3,7 @@ import React, {useState} from 'react'
 import {Button, Table, TableBody, Header, Rating} from 'semantic-ui-react'
 import {useForm} from "../Utils/hooks";
 import axios from 'axios'
+import TableSorter from "../Components/TableSorter";
 
 function SearchFilter() {
 
@@ -10,16 +11,7 @@ function SearchFilter() {
 
     return (
         <div>
-            <Table sortable celled fixed>
-                <Table.Header>
-                    <Table.Row>
-
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-
-                </Table.Body>
-            </Table>
+            <TableSorter/>
         </div>
     )
 

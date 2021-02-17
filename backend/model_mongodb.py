@@ -90,6 +90,7 @@ class Register(Model):
             db_ret = self.collection.insert_one({"username": user, "password": hash})
             return True
 
+
 class Product(Model):
     db_client = pymongo.MongoClient(credentials(), 27017)
     collection = db_client["InventoryDB"]["InventoryColl"]
@@ -105,4 +106,3 @@ class Product(Model):
         filter_category = str(filter_category)
         products = list(self.collection.find({filter_category: filter_item}))
         return products
-
