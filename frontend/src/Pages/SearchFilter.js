@@ -1,7 +1,5 @@
 /* eslint-disable no-unused-vars */
-import _ from 'lodash'
-import {Table} from 'semantic-ui-react'
-
+import {Button, Table, TableBody, Header, Rating} from 'semantic-ui-react'
 import axios from 'axios'
 import React, {useEffect, useReducer, useState} from 'react'
 
@@ -9,50 +7,49 @@ import _ from 'lodash'
 
 
 
+function SearchFilter() {
 
     const search_url_string = "http://localhost:5000/search";
 
-
     const [productList, setProductList] = useState([])
+
     function reducer(state, action) {
-      switch (action.type) {
-          case 'CHANGE_SORT':
-              if (state.column === action.column) {
-                  setProductList(productList.slice().reverse())
-                  return {
-                      ...state,
-                      direction:
-                          state.direction === 'ascending' ? 'descending' : 'ascending',
-                  }
-              }
-              else {
-                  setProductList(_.sortBy(productList, [action.column]));
-                  return {
-                      ...state,
-                      column: action.column,
-                      direction: 'ascending',
-                  }}
-          default:
-              throw new Error()
+        switch (action.type) {
+            case 'CHANGE_SORT':
+                if (state.column === action.column) {
+                    setProductList(productList.slice().reverse())
+                    return {
+                        ...state,
+                        direction:
+                            state.direction === 'ascending' ? 'descending' : 'ascending',
+                    }
+                }
+                else {
+                    setProductList(_.sortBy(productList, [action.column]));
+                    return {
+                        ...state,
+                        column: action.column,
+                        direction: 'ascending',
+                    }}
+            default:
+                throw new Error()
+        }
     }
-  }
     useEffect(() => {
         axios.get(search_url_string)
             .then(res => {
-                setProductList(res.data.products);
+                setProductList(res.data.products); //{products=...,...,...}
                 //console.log(res.data.products[0].name);
             })
     }, [])
     
     const [state, dispatch] = React.useReducer(reducer, 
-      { column: null, 
-        direction: null})
+        { column: null,
+          direction: null})
     
     const { column, direction } = state;
-
     return (
         <div>
-            {console.log(productList)}
             <Table sortable celled fixed>
             <Table.Header>
                 <Table.Row>
@@ -106,4 +103,4 @@ import _ from 'lodash'
 
 }
 
-export default TableExampleSortable
+export default SearchFilter
