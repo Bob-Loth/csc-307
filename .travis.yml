@@ -1,1 +1,24 @@
-
+matrix:
+  include:
+    - language: python
+      python:
+        - "3.8.0"
+        - "3.9.1"
+      before_install:
+        - cd backend
+      install:
+        - pip install -r requirements.txt
+      before_script:
+        - cd backend/backend_tests
+      script:
+        - python -m pytest -v
+    
+    - language: node_js
+      node_js:
+        - node
+      before_install:
+        - cd frontend
+      install:
+        - npm install 
+      script:
+        npm test
