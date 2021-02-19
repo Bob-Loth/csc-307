@@ -1,5 +1,5 @@
 ILLEGAL_CHARS = [
-    '<', '>', '/', '\\'
+    '<', '>', '/', '\\', '?'
 ]
 
 
@@ -13,14 +13,14 @@ def verify_password(usrname, pwd):
     :type pwd: str
     :rtype : dict
     """
-    errors = {}
+    errors = {'username': [], 'password': []}
     if usrname.strip() == '':
-        errors['username'] = 'Username must not be empty'
+        errors['username'].append('Username must not be empty')
     if pwd.strip() == '':
-        errors['password'] = 'Password must not be empty'
+        errors['password'].append('Password must not be empty')
     for ill_char in ILLEGAL_CHARS:
         if ill_char in usrname:
-            errors['username'] = "Illegal character detected: {}".format(ill_char)
+            errors['username'].append("Illegal character detected: {}".format(ill_char))
         if ill_char in pwd:
-            errors['password'] = "Illegal character detected: {}".format(ill_char)
+            errors['password'].append("Illegal character detected: {}".format(ill_char))
     return errors
