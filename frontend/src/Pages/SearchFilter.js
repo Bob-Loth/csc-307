@@ -91,7 +91,14 @@ function SearchFilter() {
             <Table.Body>
                 {productList.map(({name, expiration_date, sku, category, price, shipment_batch}) => (
                     <Table.Row key={name}>
-                        <ProductInfoModal></ProductInfoModal>
+                        <ProductInfoModal 
+                        name={name}
+                        expiration_date={expiration_date}
+                        sku={sku}
+                        category={category}
+                        price={price}
+                        shipment_batch={shipment_batch}
+                        ></ProductInfoModal>
                         <Table.Cell>{name}</Table.Cell>
                         <Table.Cell>{expiration_date}</Table.Cell>
                         <Table.Cell>{sku}</Table.Cell>
