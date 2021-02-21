@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-import {Button, Table, TableBody, Header, Rating} from 'semantic-ui-react'
+import {Table} from 'semantic-ui-react'
 import axios from 'axios'
 import React, {useEffect, useReducer, useState} from 'react'
-
+import ProductInfoModal from '../Components/ProductInfoModal'
 import _ from 'lodash'
 
 
@@ -43,7 +43,7 @@ function SearchFilter() {
             })
     }, [])
     
-    const [state, dispatch] = React.useReducer(reducer, 
+    const [state, dispatch] = useReducer(reducer, 
         { column: null,
           direction: null})
     
@@ -53,6 +53,9 @@ function SearchFilter() {
             <Table sortable celled fixed>
             <Table.Header>
                 <Table.Row>
+                    <Table.HeaderCell>
+
+                    </Table.HeaderCell>
                     <Table.HeaderCell
                         sorted={column === 'name' ? direction : null}
                         onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'name'})}>
@@ -88,6 +91,7 @@ function SearchFilter() {
             <Table.Body>
                 {productList.map(({name, expiration_date, sku, category, price, shipment_batch}) => (
                     <Table.Row key={name}>
+                        <ProductInfoModal></ProductInfoModal>
                         <Table.Cell>{name}</Table.Cell>
                         <Table.Cell>{expiration_date}</Table.Cell>
                         <Table.Cell>{sku}</Table.Cell>
