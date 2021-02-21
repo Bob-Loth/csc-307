@@ -9,7 +9,7 @@ matrix:
       install:
         - pip install -r requirements.txt
       before_script:
-        - cd backend/backend_tests
+        - cd backend_tests
       script:
         - python -m pytest -v
     
