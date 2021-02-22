@@ -1,3 +1,8 @@
+branches:
+  only: #this is a whitelist for branches to build on, add if you want to build on yours as well
+    - dev
+    - bob
+
 matrix:
   include:
     - language: python
@@ -9,7 +14,7 @@ matrix:
       install:
         - pip install -r requirements.txt
       before_script:
-        - cd backend/backend_tests
+        - cd backend_tests
       script:
         - python -m pytest -v
     
@@ -21,4 +26,4 @@ matrix:
       install:
         - npm install 
       script:
-        npm test
+        - npm test
