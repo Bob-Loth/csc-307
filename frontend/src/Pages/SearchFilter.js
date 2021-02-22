@@ -98,7 +98,9 @@ function SearchFilter() {
                         category={category}
                         price={price}
                         shipment_batch={shipment_batch}
-                        ></ProductInfoModal>
+                        >
+
+                        </ProductInfoModal>
                         <Table.Cell>{name}</Table.Cell>
                         <Table.Cell>{expiration_date}</Table.Cell>
                         <Table.Cell>{sku}</Table.Cell>
