@@ -1,5 +1,4 @@
 import React, {Component} from 'react'
-import ReactDOM from 'react-dom'
 import './index.css'
 import Login from "./Pages/login";
 import Register from "./Pages/register";
@@ -14,6 +13,7 @@ import {
     Link,
     Redirect
 } from "react-router-dom";
+
 import {Container} from "semantic-ui-react";
 
 class App extends Component {

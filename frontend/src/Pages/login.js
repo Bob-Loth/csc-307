@@ -12,7 +12,11 @@ import axios from 'axios'
 function Login() {
 
     const login_url_string = "http://localhost:5000/login";
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({
+        username : [],
+        password : []
+    })
+    const [success, setSuccess] = useState(null)
 
     const initialState = {
         username: '',
@@ -33,7 +37,14 @@ function Login() {
         axios.post(login_url_string,{'name': values.username, 'pwd': values.password})
           .then( (resp) => {
                 if (resp.data.success){
+                    setSuccess(true)
                     window.location.replace("http://localhost:3000/dashboard");
+                }
+                if(!resp.data.success) {
+
+                    console.log(resp.data)
+                    setSuccess(false)
+                    setErrors(resp.data.errors)
                 }
             });
     }
@@ -47,7 +58,6 @@ function Login() {
                     placeholder='Username...'
                     name='username'
                     value={values.username}
-                    error={!!errors.username}
                     onChange={onChange}
                 />
                 <Form.Input
@@ -56,7 +66,6 @@ function Login() {
                     name='password'
                     type='password'
                     value={values.password}
-                    error={!!errors.password}
                     onChange={onChange}
                 />
                 <Button type='submit' primary>
@@ -64,10 +73,28 @@ function Login() {
                 </Button>
             </Form>
             <Button onClick={e => switchPage()}>Register</Button>
-            {Object.keys(errors).length > 0 && (
+            {
+                (success === false && (
+                    <div className='ui error message'>
+                        <h1> Login Failed! </h1>
+                    </div>
+                ))
+            }
+            {(errors.username.length > 0 )  && (
                 <div className='ui error message'>
+                    <h3> Username Input Error </h3>
                     <ul className='list'>
-                        {Object.values(errors).map((value => (
+                        {Object.values(errors.username).map((value => (
+                            <li key={value}>{value}</li>
+                        )))}
+                    </ul>
+                </div>
+            )}
+            {(errors.password.length > 0 )  && (
+                <div className='ui error message'>
+                    <h3> Password Input Error </h3>
+                    <ul className='list'>
+                        {Object.values(errors.password).map((value => (
                             <li key={value}>{value}</li>
                         )))}
                     </ul>
