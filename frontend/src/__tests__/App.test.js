@@ -3,6 +3,9 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import App from "../App";
 import Login from "../Pages/login";
 
+test('example test description', () => {
+  expect( true )
+})
 
 // test('testing failed login no input', () => {
 //   render(<Login />)
