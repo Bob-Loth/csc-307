@@ -3,6 +3,7 @@ from flask import request
 from flask import jsonify
 from flask_cors import CORS
 from model_mongodb import *
+import jwt
 
 from hash import *
 from utils.Verification import verify_password
@@ -25,16 +26,22 @@ def login():
         login = Login(login_attempt)
 
         db_hash = login.find_name_ret_hash(username)
-        if db_hash == False:
-            resp = jsonify(success=False, errors=verify_password(username, password))
+        error_dict = verify_password(username, password)
+        user = login.find_name_ret_hash(username)
+        encoded = jwt.encode({
+            'jwtToken': user
+        }, 'csc307_key_jwt', algorithm='HS256')
+
+        if db_hash is False:
+            resp = jsonify(success=False, errors=error_dict, hash='false')
             return resp
 
         match = verify(password, db_hash)
 
         if match:
-            resp = jsonify(success=True, errors=verify_password(username, password))
+            resp = jsonify(success=True, errors=error_dict, jwtToken=encoded)
         else:
-            resp = jsonify(success=False, errors=verify_password(username, password))
+            resp = jsonify(success=False, errors=error_dict, verify='false')
 
         return resp
 
@@ -46,15 +53,13 @@ def register():
         pwd = request.get_json().get('pwd')
 
         errors = verify_password(name, pwd)
-        if not errors:
-            new_user = Register(request.get_json())
-            if new_user.register_user(name, encrypt(pwd)):
-                resp = jsonify(success=True, errors=errors)
-            else:
-                resp = jsonify(success=False, errors=errors)
-            return resp
+
+        new_user = Register(request.get_json())
+        if new_user.register_user(name, encrypt(pwd)):
+            resp = jsonify(success=True, errors=errors)
         else:
-            return jsonify(success=False, errors=errors)
+            resp = jsonify(success=False, errors=errors)
+        return resp
 
 
 @app.route('/dashboard', methods=['POST'])
