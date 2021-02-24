@@ -2,7 +2,6 @@ ILLEGAL_CHARS = [
     '<', '>', '/', '\\', '?'
 ]
 
-
 # verify password makes sure that the login and password isn't empty and doesn't
 # contain any illegal characters such as: < > /
 def verify_password(usrname, pwd):

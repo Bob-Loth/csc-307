@@ -41,7 +41,6 @@ function Login() {
                     window.location.replace("http://localhost:3000/dashboard");
                 }
                 if(!resp.data.success) {
-
                     console.log(resp.data)
                     setSuccess(false)
                     setErrors(resp.data.errors)
@@ -72,7 +71,7 @@ function Login() {
                     Login!
                 </Button>
             </Form>
-            <Button onClick={e => switchPage()}>Register</Button>
+            <Button onClick={() => switchPage()}>Register</Button>
             {
                 (success === false && (
                     <div className='ui error message'>
