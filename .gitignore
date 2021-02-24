@@ -1,2 +1,9 @@
 /backend/venv/
 /backend/private_credentials.py
+/.idea/modules.xml
+/.idea/.gitignore
+/.idea/codeStyles/codeStyleConfig.xml
+/.idea/csc-307.iml
+/.idea/misc.xml
+/.idea/inspectionProfiles/profiles_settings.xml
+/.idea/vcs.xml
