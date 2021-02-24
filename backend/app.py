@@ -28,6 +28,7 @@ def login():
         db_hash = login.find_name_ret_hash(username)
         error_dict = verify_password(username, password)
         user = login.find_name_ret_hash(username)
+
         encoded = jwt.encode({
             'jwtToken': user
         }, 'csc307_key_jwt', algorithm='HS256')
@@ -55,6 +56,7 @@ def register():
         errors = verify_password(name, pwd)
 
         new_user = Register(request.get_json())
+
         if new_user.register_user(name, encrypt(pwd)):
             resp = jsonify(success=True, errors=errors)
         else:
