@@ -1,8 +1,8 @@
 /* eslint-disable no-unused-vars */
-import React, {useState} from 'react'
+import React, {useContext, useState} from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
-
+import {AuthContext} from "../Utils/auth";
 import {useForm} from "../Utils/hooks";
 import axios from 'axios'
 
@@ -25,8 +25,9 @@ function Login() {
 
     const {onChange, onSubmit, values} = useForm(loginUserCallback, initialState)
 
+    const context = useContext(AuthContext)
+
     function switchPage() {
-        console.log("hello");
         window.location.replace("http://localhost:3000/register");
         
     }
@@ -38,6 +39,7 @@ function Login() {
           .then( (resp) => {
                 if (resp.data.success){
                     setSuccess(true)
+                    context.login(resp.data['jwtToken'])
                     window.location.replace("http://localhost:3000/dashboard");
                 }
                 if(!resp.data.success) {
