@@ -26,4 +26,5 @@ matrix:
       install:
         - npm install 
       script:
+        - npx eslint src
         - npm test
