@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {Menu} from 'semantic-ui-react'
 import {Link} from "react-router-dom";
 import 'semantic-ui-css/semantic.min.css'
+import {AuthContext} from "../Utils/auth";
 
 function MenuBar() {
 
@@ -13,7 +14,8 @@ function MenuBar() {
     const [activeItem, setActiveItem] = useState(path)
 
     const handleItemClick = (e, {name}) => setActiveItem(name)
-
+    const user = useContext(AuthContext)
+    console.log(user)
     return (
         <Menu size='massive' color='teal'>
             <Menu.Item
