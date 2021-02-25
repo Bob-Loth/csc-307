@@ -1,11 +1,8 @@
-/* eslint-disable no-unused-vars */
 import {Table} from 'semantic-ui-react'
 import axios from 'axios'
 import React, {useEffect, useReducer, useState} from 'react'
 import ProductInfoModal from '../Components/ProductInfoModal'
 import _ from 'lodash'
-
-
 
 function SearchFilter() {
 

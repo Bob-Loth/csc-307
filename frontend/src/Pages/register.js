@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, {useState} from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import {useForm} from "../Utils/hooks";
@@ -8,6 +7,7 @@ import axios from 'axios'
 function Register(){
 
     const register_url_string = "http://localhost:5000/register";
+    // eslint-disable-next-line no-unused-vars
     const [errors, setErrors] = useState({})
 
     const initialState = {
@@ -15,7 +15,7 @@ function Register(){
         password: '',
     }
 
-    const {onChange, onSubmit, values} = useForm(registerUserCallback, initialState)
+    const {onChange, values} = useForm(registerUserCallback, initialState)
 
     function switchPage() {
         console.log("hello");

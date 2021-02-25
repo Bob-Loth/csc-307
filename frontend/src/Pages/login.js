@@ -1,13 +1,9 @@
-/* eslint-disable no-unused-vars */
-import React, {useContext, useState} from 'react'
+import React, {useState, useContext} from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
 import {AuthContext} from "../Utils/auth";
 import {useForm} from "../Utils/hooks";
 import axios from 'axios'
-
-
-
 
 function Login() {
 
@@ -23,7 +19,7 @@ function Login() {
         password: '',
     }
 
-    const {onChange, onSubmit, values} = useForm(loginUserCallback, initialState)
+    const {onChange, values} = useForm(loginUserCallback, initialState)
 
     const context = useContext(AuthContext)
 
