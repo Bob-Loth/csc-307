@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import React, {useState} from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
@@ -23,7 +22,7 @@ function Login() {
         password: '',
     }
 
-    const {onChange, onSubmit, values} = useForm(loginUserCallback, initialState)
+    const {onChange, values} = useForm(loginUserCallback, initialState)
 
     function switchPage() {
         console.log("hello");
@@ -72,7 +71,7 @@ function Login() {
                     Login!
                 </Button>
             </Form>
-            <Button onClick={e => switchPage()}>Register</Button>
+            <Button onClick={() => switchPage()}>Register</Button>
             {
                 (success === false && (
                     <div className='ui error message'>

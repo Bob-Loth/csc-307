@@ -10,8 +10,8 @@ import {
     BrowserRouter as Router,
     Route,
     Switch,
-    Link,
-    Redirect
+    //Link,
+    //Redirect
 } from "react-router-dom";
 
 import {Container} from "semantic-ui-react";
