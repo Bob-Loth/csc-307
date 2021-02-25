@@ -3,8 +3,8 @@ ILLEGAL_CHARS = [
 ]
 
 
-# verify password makes sure that the login and password isn't empty and doesn't
-# contain any illegal characters such as: < > /
+# verify password makes sure that the login and password isn't empty and
+# doesn't contain any illegal characters such as: < > /
 def verify_password(usrname, pwd):
     """
     :param usrname: username
@@ -20,7 +20,9 @@ def verify_password(usrname, pwd):
         errors['password'].append('Password must not be empty')
     for ill_char in ILLEGAL_CHARS:
         if ill_char in usrname:
-            errors['username'].append("Illegal character detected: {}".format(ill_char))
+            errors['username'].append("Illegal character detected: {}"
+                                      .format(ill_char))
         if ill_char in pwd:
-            errors['password'].append("Illegal character detected: {}".format(ill_char))
+            errors['password'].append("Illegal character detected: {}"
+                                      .format(ill_char))
     return errors

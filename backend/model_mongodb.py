@@ -87,7 +87,8 @@ class Register(Model):
             return False
         else:
             # db_ret is the _id field of the registered user
-            db_ret = self.collection.insert_one({"username": user, "password": hash})
+            db_ret = self.collection.insert_one(
+                {"username": user, "password": hash})
             return True
 
 
