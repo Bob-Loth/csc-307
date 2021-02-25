@@ -9,6 +9,7 @@
 ### Style Guide
 
 For code submitted to frontend, we plan on using the recommended settings for eslint and the react-plugin for eslint.
+
 For code submitted to backend, we plan on conforming to the pep8 standard by usage of pycodestyle, formerly known as pep8 (pip install pycodestyle)
 
 
