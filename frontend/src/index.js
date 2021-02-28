@@ -1,5 +1,4 @@
-/* eslint-disable no-unused-vars */
-
+import React from 'react'
 const ReactDOM = require('react-dom')
 import App from "./App";
 
