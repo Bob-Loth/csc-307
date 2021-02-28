@@ -1,4 +1,4 @@
-import React, {Component} from 'react'
+import React from 'react'
 import './index.css'
 import Login from "./Pages/login";
 import Register from "./Pages/register";
@@ -7,34 +7,28 @@ import MenuBar from "./Components/MenuBar";
 import SearchFilter from "./Pages/SearchFilter";
 import {AuthProvider} from "./Utils/auth";
 
-import {
-    BrowserRouter as Router,
-    Route,
-    Switch,
-    Link,
-    Redirect
-} from "react-router-dom";
+import {BrowserRouter as Router, Route, Switch} from "react-router-dom";
 
 import {Container} from "semantic-ui-react";
+import AuthRoute from "./Utils/authroute";
+import ProtectRoute from "./Utils/protectroute";
 
-class App extends Component {
-    render() {
-        return (
-            <Container>
-                <AuthProvider>
-                    <Router>
-                        <MenuBar/>
-                        <Switch>
-                            <Route exact path="/" component={Login}/>
-                            <Route exact path="/register" component={Register}/>
-                            <Route exact path="/dashboard" component={Dashboard}/>
-                            <Route exact path="/search" component={SearchFilter}/>
-                        </Switch>
-                    </Router>
-                </AuthProvider>
-            </Container>
-        )
-    }
+function App() {
+    return (
+        <Container>
+            <AuthProvider>
+                <Router>
+                    <MenuBar/>
+                    <Switch>
+                        <Route exact path="/" component={Login}/>
+                        <ProtectRoute exact path="/register" component={Register}/>
+                        <AuthRoute exact path="/dashboard" component={Dashboard}/>
+                        <AuthRoute exact path="/search" component={SearchFilter}/>
+                    </Switch>
+                </Router>
+            </AuthProvider>
+        </Container>
+    )
 }
 
 export default App
