@@ -37,6 +37,8 @@
   },
   "devDependencies": {
     "@testing-library/dom": "^7.29.6",
+    "eslint": "^7.20.0",
+    "eslint-plugin-react": "^7.22.0",
     "react-router-dom": "^5.2.0"
   }
 }

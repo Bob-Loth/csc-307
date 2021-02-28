@@ -1,20 +1,19 @@
-/* eslint-disable no-unused-vars */
-import React, {useState} from 'react'
-import {Button, Table, TableBody, Header, Rating} from 'semantic-ui-react'
+import React from 'react'
+import {Button} from 'semantic-ui-react'
 import {useForm} from "../Utils/hooks";
 import axios from 'axios'
 
 function Dashboard() {
 
     const login_url_string = "http://localhost:5000/home";
-    const [errors, setErrors] = useState({})
+    //const [errors, setErrors] = useState({})
 
     const initialState = {
         username: '',
         password: '',
     }
-
-    const {onChange, onSubmit, values} = useForm(loginUserCallback, initialState)
+    
+    const {values} = useForm(loginUserCallback, initialState)
 
     function switchPage() {
         console.log("hello");
@@ -32,7 +31,7 @@ function Dashboard() {
     return (
         <div className='form-container'>
             <h1>Dashboard </h1>
-            <Button onClick={e => switchPage()}>Back to Login</Button>
+            <Button onClick={() => switchPage()}>Back to Login</Button>
         </div>
     )
 

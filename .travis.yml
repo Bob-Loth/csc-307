@@ -17,6 +17,7 @@ matrix:
       before_script:
         - cd backend_tests
       script:
+        - python -m pycodestyle . --exclude=venv
         - python -m pytest -v
     
     - language: node_js
@@ -27,4 +28,5 @@ matrix:
       install:
         - npm install 
       script:
+        - npx eslint src
         - npm test
