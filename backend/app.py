@@ -35,16 +35,16 @@ def login():
 
         if db_hash is False:
             resp = jsonify(success=False, errors=error_dict, hash='false')
-            return resp
+            return resp, 401
 
         match = verify(password, db_hash)
 
         if match:
             resp = jsonify(success=True, errors=error_dict, jwtToken=encoded)
+            return resp, 200
         else:
             resp = jsonify(success=False, errors=error_dict, verify='false')
-
-        return resp
+            return resp, 401
 
 
 @app.route('/register', methods=['POST'])
@@ -61,7 +61,7 @@ def register():
             resp = jsonify(success=True, errors=errors)
         else:
             resp = jsonify(success=False, errors=errors)
-        return resp
+        return resp, 201
 
 
 @app.route('/dashboard', methods=['POST'])

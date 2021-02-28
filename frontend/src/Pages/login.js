@@ -32,16 +32,16 @@ function Login() {
         //once login button is clicked, send the fields to the backend and do
         //something with the response
         axios.post(login_url_string,{'name': values.username, 'pwd': values.password})
-          .then( (resp) => {
-                if (resp.data.success){
-                    setSuccess(true)
-                    context.login(resp.data['jwtToken'])
-                    window.location.replace("http://localhost:3000/dashboard");
-                }
-                if(!resp.data.success) {
-                    console.log(resp.data)
+            .then( (resp) => {
+                setSuccess(true)
+                context.login(resp.data['jwtToken'])
+                window.location.replace("http://localhost:3000/dashboard")
+            })
+            .catch(err => {
+                if (err.response) {
+                    console.log(err.response.data)
                     setSuccess(false)
-                    setErrors(resp.data.errors)
+                    setErrors(err.response.data.errors)
                 }
             });
     }
