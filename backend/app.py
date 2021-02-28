@@ -59,9 +59,10 @@ def register():
 
         if new_user.register_user(name, encrypt(pwd)):
             resp = jsonify(success=True, errors=errors)
+            return resp, 201
         else:
             resp = jsonify(success=False, errors=errors)
-        return resp, 201
+            return resp, 409
 
 
 @app.route('/dashboard', methods=['POST'])

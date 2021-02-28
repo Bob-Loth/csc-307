@@ -27,7 +27,12 @@ function Register(){
         //once login button is clicked, send the fields to the backend and do
         //something with the response
         axios.post(register_url_string,{'name': values.username, 'pwd': values.password})
-          .then( (resp) => console.log(resp));
+          .then( (resp) => console.log(resp))
+          .catch( (err) => {
+              if (err.response){
+                  console.log(err.response.data)
+              }
+          });
     }
 
     return (
