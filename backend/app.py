@@ -71,9 +71,11 @@ def dashboard():
     return "dashboard"
 
 
-@app.route('/search', methods=['GET'])
+@app.route('/search', methods=['GET','PATCH'])
 def search():
     if request.method == 'GET':
         productdb = Product()
         products = productdb.list_all()
         return jsonify(products=products)
+    if request.method == 'PATCH':
+        return jsonify(id=request.args.get("_id"))

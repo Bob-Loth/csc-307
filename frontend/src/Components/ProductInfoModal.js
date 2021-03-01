@@ -6,7 +6,7 @@ import { Button, Modal, Form } from 'semantic-ui-react'
 function ProductInfoModal(props){
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState("");
-  const search_url_string = "http://localhost:3000/search"
+  const search_url_string = "http://localhost:5000/search"
   const initialState = {
     _id: props._id,
     name: props.name,
