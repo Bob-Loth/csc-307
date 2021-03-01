@@ -35,7 +35,7 @@ function Login() {
         axios.post(login_url_string,{'name': values.username, 'pwd': values.password})
             .then( (resp) => {
                 setSuccess(true)
-                context.login(resp.data['jwtToken'])
+                login(resp.data['jwtToken'])
                 window.location.replace("http://localhost:3000/dashboard")
             })
             .catch(err => {
