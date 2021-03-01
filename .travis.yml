@@ -2,7 +2,7 @@ branches:
   only: #this is a whitelist for branches to build on, add if you want to build on yours as well
     - dev
     - bob
-
+    - david
 matrix:
   include:
     - language: python
@@ -28,4 +28,3 @@ matrix:
         - npm install 
       script:
         - npx eslint src
-        - npm test
