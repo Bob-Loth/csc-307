@@ -5,6 +5,7 @@
 |dev|[![Build Status](https://travis-ci.com/Bob-Loth/csc-307.svg?branch=dev)](https://travis-ci.com/Bob-Loth/csc-307)|
 |main| [![Build Status](https://travis-ci.com/Bob-Loth/csc-307.svg?branch=main)](https://travis-ci.com/Bob-Loth/csc-307)|
 |bob|[![Build Status](https://travis-ci.com/Bob-Loth/csc-307.svg?branch=bob)](https://travis-ci.com/Bob-Loth/csc-307)|
+|david|[![Build Status](https://travis-ci.com/Bob-Loth/csc-307.svg?branch=david)](https://travis-ci.com/Bob-Loth/csc-307)|
 
 ### Style Guide
 
