@@ -36,7 +36,6 @@ function SearchFilter() {
         axios.get(search_url_string)
             .then(res => {
                 setProductList(res.data.products); //{products=...,...,...}
-                //console.log(res.data.products[0].name);
             })
     }, [])
     
@@ -86,10 +85,11 @@ function SearchFilter() {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {productList.map(({name, expiration_date, sku, category, price, shipment_batch}) => (
+                {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch}) => (
                     <Table.Row key={name}>
                         <Table.HeaderCell>
-                            <ProductInfoModal 
+                            <ProductInfoModal
+                            _id={_id}
                             name={name}
                             expiration_date={expiration_date}
                             sku={sku}

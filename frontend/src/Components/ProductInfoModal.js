@@ -8,6 +8,7 @@ function ProductInfoModal(props){
   const [errors, setErrors] = useState("");
   const search_url_string = "http://localhost:3000/search"
   const initialState = {
+    _id: props._id,
     name: props.name,
     sku: props.sku,
     category: props.category,
@@ -63,16 +64,24 @@ function ProductInfoModal(props){
     }
     return errorString;
   }
+  //makes sure only the modified fields will be sent.
+  function buildPatchObj() {
+    let ret = {};
+    if (props.name !== values.name) ret.name = values.name;
+    if (props.sku !== values.sku) ret.sku = values.sku;
+    if (props.category !== values.category) ret.category = values.category;
+    if (props.expiration_date !== values.expiration_date) ret.expiration_date = values.expiration_date;
+    if (props.price !== values.price) ret.price = values.price;
+    if (props.shipment_batch !== values.shipment_batch) ret.shipment_batch = values.shipment_batch;
+    
+    return ret
+  }
 
-  function editProductCallback() {
-    setOpen(false);
-    axios.patch(search_url_string,{
-      'name': values.name,
-      'sku': values.sku,
-      'category': values.category,
-      'expiration_date': values.expiration_date,
-      'price': values.price,
-      'shipment_batch': values.shipment_batch})
+  function editProductCallback(patchObj) {
+    
+    /*if there was any data edited*/
+    if (Object.keys(patchObj).length !== 0){
+      axios.patch(search_url_string + "?_id=" + values._id.toString(), patchObj)
         .then( (resp) => {
             console.log(resp.data)
         })
@@ -81,6 +90,7 @@ function ProductInfoModal(props){
                 console.log(err.response.data)
             }
         });
+    }
 }
 
   return(
@@ -157,11 +167,21 @@ function ProductInfoModal(props){
         <Button onClick={() => setOpen(false)}>Close Without Submitting Changes</Button>
         <Button type='submit' primary loading={false}
                 onClick= {() => {
-                  const errors = editFormatting()
+                  let errors = editFormatting()
+                  const patchObj = buildPatchObj();
+                  if (Object.keys(patchObj).length === 0){
+                    errors = errors.concat("Must modify at least one field\n")
+                  }
                   setErrors(errors)
-                  editProductCallback()
-                  }}>
-                    Submit Changes
+                  if (errors === ""){
+                    console.log(errors)
+                    editProductCallback(patchObj)
+                  }
+                  else{
+                    console.log(errors)
+                  }
+                }}>
+                  Submit Changes
                 </Button>
       </Modal.Actions>
      
