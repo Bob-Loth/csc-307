@@ -6,7 +6,7 @@ import { Button, Modal, Form } from 'semantic-ui-react'
 function ProductInfoModal(props){
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState("");
-  const search_url_string = "http://localhost:3000/product"
+  const search_url_string = "http://localhost:3000/search"
   const initialState = {
     name: props.name,
     sku: props.sku,
@@ -67,7 +67,7 @@ function ProductInfoModal(props){
   function editProductCallback() {
     setOpen(false);
     axios.patch(search_url_string,{
-      'name': props.name,
+      'name': values.name,
       'sku': values.sku,
       'category': values.category,
       'expiration_date': values.expiration_date,
@@ -119,7 +119,7 @@ function ProductInfoModal(props){
                 />
                 <Form.Input
                     label='Expiration Date'
-                    placeholder='New m-d-y'
+                    placeholder='New Expiration Date (m-d-y)'
                     name='expiration_date'
                     value={values.expiration_date}
                     onChange={onChange}
@@ -155,10 +155,11 @@ function ProductInfoModal(props){
 
       <Modal.Actions>
         <Button onClick={() => setOpen(false)}>Close Without Submitting Changes</Button>
-        <Button type='submit' primary
+        <Button type='submit' primary loading={false}
                 onClick= {() => {
                   const errors = editFormatting()
                   setErrors(errors)
+                  editProductCallback()
                   }}>
                     Submit Changes
                 </Button>
