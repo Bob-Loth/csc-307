@@ -36,7 +36,6 @@ function SearchFilter() {
         axios.get(search_url_string)
             .then(res => {
                 setProductList(res.data.products); //{products=...,...,...}
-                //console.log(res.data.products[0].name);
             })
     }, [])
     
@@ -86,24 +85,27 @@ function SearchFilter() {
                 </Table.Row>
             </Table.Header>
             <Table.Body>
-                {productList.map(({name, expiration_date, sku, category, price, shipment_batch}) => (
+                {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch}) => (
                     <Table.Row key={name}>
-                        <ProductInfoModal 
-                        name={name}
-                        expiration_date={expiration_date}
-                        sku={sku}
-                        category={category}
-                        price={price}
-                        shipment_batch={shipment_batch}
-                        >
-
-                        </ProductInfoModal>
+                        <Table.HeaderCell>
+                            <ProductInfoModal
+                            _id={_id}
+                            name={name}
+                            expiration_date={expiration_date}
+                            sku={sku}
+                            category={category}
+                            price={price}
+                            shipment_batch={shipment_batch}
+                            >
+                            </ProductInfoModal>
+                        </Table.HeaderCell>
                         <Table.Cell>{name}</Table.Cell>
                         <Table.Cell>{expiration_date}</Table.Cell>
                         <Table.Cell>{sku}</Table.Cell>
                         <Table.Cell>{category}</Table.Cell>
                         <Table.Cell>{price}</Table.Cell>
                         <Table.Cell>{shipment_batch}</Table.Cell>
+                        
                     </Table.Row>
                 ))}
             </Table.Body>

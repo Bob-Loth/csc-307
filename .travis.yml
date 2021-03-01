@@ -3,7 +3,6 @@ branches:
     - dev
     - bob
     - david
-
 matrix:
   include:
     - language: python
@@ -29,4 +28,3 @@ matrix:
         - npm install 
       script:
         - npx eslint src
-        - npm test
