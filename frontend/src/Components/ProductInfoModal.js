@@ -2,7 +2,6 @@ import React, {useState} from 'react'
 import {useForm} from '../Utils/hooks'
 import axios from 'axios'
 import { Button, Modal, Form } from 'semantic-ui-react'
-import { isNull } from 'lodash';
 
 function ProductInfoModal(props){
   const [open, setOpen] = useState(false);
@@ -22,16 +21,17 @@ function ProductInfoModal(props){
   // gives message if no changes are made, or formatting isn't correct.
   // returns errors if anything went wrong.
   function editFormatting() {
+    let errorString = "";
     let price = parseFloat(values.price, 10)
     console.log("item.price",values.price)
     console.log("price",price)
     // round price to 2 decimal places, return errors if not a positive number
     if (isNaN(price)){
       console.log(typeof(price),typeof(values.price),price,values.price)
-      return "Price must be a number"
+      errorString = errorString.concat("Price must be a number.\n")
     }
     else if (price < 0){
-      return "Price must be a positive number"
+      errorString = errorString.concat("Price must be a positive number.\n")
     }
     else{
       price = price.toFixed(2)
@@ -40,13 +40,13 @@ function ProductInfoModal(props){
     // number must be 8 digits long, exactly
     const regexSku = new RegExp('^SKU#\\d{8}$');
     if (!regexSku.test(values.sku)){//if not an 8 digit number
-      return "SKU code number must be 8 digits and start with 'SKU#'"
+      errorString = errorString.concat("SKU code number must be 8 digits and start with 'SKU#'\n")
     }
     // Shipment must be in format "S#digits, from 1 up to 8 digits"
     const regexShipment = new RegExp('^S#[0-9]{1,8}$')
     if (!regexShipment.test(values.shipment_batch)){
-      return "Shipment must be of the form S#N, " + 
-                      "where N is a 1-8 digit number"
+      errorString = errorString.concat("Shipment must be of the form S#N, " + 
+                      "where N is a 1-8 digit number\n")
     }
     // a date, of the format m-d-y. m and d can be either 1-2 digits.
     //m must be 1-12. d must be 1-31. 
@@ -54,14 +54,14 @@ function ProductInfoModal(props){
     const regexDate = new RegExp('^((1[0-2]|[1-9])-(3[01]|[12][0-9]|[1-9])' + 
     '-(19[0-9]{2}|2[0-1][0-9]{2}))|(N/A)$') // <- this part is the -y, above are m-d
     if (!regexDate.test(values.expiration_date)){
-      return "Date must be of the format m-d-y.\n" +
-                      "Valid month: 1-12\n" +
+      errorString = errorString.concat("Date must be of the format m-d-y.\n" +
+                      "Valid month: 1-12\n" + 
                       "Valid day: 1-31\n" +
                       "Valid year: 1900-2199\n" +
-                      "Optionally, 'N/A' should be used for items with no" + 
-                      "expiration date."
+                      "Optionally, 'N/A' should be used for items with no\n" + 
+                      "expiration date.")
     }
-    return null
+    return errorString;
   }
 
   function editProductCallback() {
@@ -141,10 +141,12 @@ function ProductInfoModal(props){
                 
             </Form>
             
-            {(!isNull(errors)) && (
+            {(errors !== "") && (
                 <div className='ui error message'>
                     <h3> Edit Formatting Error </h3>
-                    <p>{errors}</p>
+                    <div>{errors.split("\n").map((i,key) => {
+                                      return <div key={key}>{i}</div>;
+        })}</div>
                 </div>
             )}
         </div>
