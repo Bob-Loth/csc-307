@@ -1,30 +1,26 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {Button} from 'semantic-ui-react'
-import {useForm} from "../Utils/hooks";
 import axios from 'axios'
 
 function Dashboard() {
 
-    const login_url_string = "http://localhost:5000/home";
-    //const [errors, setErrors] = useState({})
+    const dash_url_string = "http://localhost:5000/dashboard";
 
-    const initialState = {
-        username: '',
-        password: '',
-    }
-    
-    const {values} = useForm(loginUserCallback, initialState)
+    const token = localStorage.getItem('jwtToken')
 
     function switchPage() {
         window.location.replace("http://localhost:3000");
     }
 
-    function loginUserCallback() {
-        //once login button is clicked, send the fields to the backend and do
-        //something with the response
-        axios.post(login_url_string, {'name': values.username, 'pwd': values.password})
-            .then((resp) => console.log(resp));
-    }
+    useEffect(() => {
+        axios.get(dash_url_string, {
+            headers: {
+                'Authorization': `Bearer ${token}`
+            }
+        }).then(res => {
+            console.log(res)
+        })
+    }, [])
 
     return (
         <div className='form-container'>

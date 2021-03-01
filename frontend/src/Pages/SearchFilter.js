@@ -7,8 +7,8 @@ import 'semantic-ui-css/semantic.min.css'
 import ProductInfoModal from '../Components/ProductInfoModal'
 import _ from 'lodash'
 
-function SearchFilter() {
 
+function SearchFilter() {
     const search_url_string = "http://localhost:5000/search";
     const [productList, setProductList] = useState([])
     const [exp, setExp] = useState('0')
