@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, { useState} from 'react'
 import {Form, Button} from 'semantic-ui-react'
 import {useForm} from "../Utils/hooks";
 import axios from 'axios'
@@ -7,30 +7,34 @@ import axios from 'axios'
 function Register(){
 
     const register_url_string = "http://localhost:5000/register";
-    // eslint-disable-next-line no-unused-vars
-    const [errors, setErrors] = useState({})
+    const [errors, setErrors] = useState({
+        username: [],
+        password: []
+    })
 
+    const [success, setSuccess] = useState(null)
     const initialState = {
         username: '',
         password: '',
     }
-
     const {onChange, values} = useForm(registerUserCallback, initialState)
 
     function switchPage() {
-        console.log("hello");
         window.location.replace("http://localhost:3000/");
-        
     }
 
     function registerUserCallback() {       
         //once login button is clicked, send the fields to the backend and do
         //something with the response
         axios.post(register_url_string,{'name': values.username, 'pwd': values.password})
-          .then( (resp) => console.log(resp))
+          .then( () => {
+              setSuccess(true)
+              switchPage()
+          })
           .catch( (err) => {
               if (err.response){
-                  console.log(err.response.data)
+                  setSuccess(false)
+                  setErrors(err.response.data.errors)
               }
           });
     }
@@ -44,7 +48,6 @@ function Register(){
                     placeholder='Username...'
                     name='username'
                     value={values.username}
-                    error={!!errors.username}
                     onChange={onChange}
                 />
                 <Form.Input
@@ -53,7 +56,6 @@ function Register(){
                     name='password'
                     type='password'
                     value={values.password}
-                    error={!!errors.password}
                     onChange={onChange}
                 />
                 <Button type='submit' primary>
@@ -61,10 +63,28 @@ function Register(){
                 </Button>
             </Form>
             <Button onClick={() => switchPage()}>Back to Login</Button>
-            {Object.keys(errors).length > 0 && (
+            {
+                (success === false && (
+                    <div className='ui error message'>
+                        <h1> Register Failed! </h1>
+                    </div>
+                ))
+            }
+            {(errors.username.length > 0) && (
                 <div className='ui error message'>
+                    <h3> Username Input Error </h3>
                     <ul className='list'>
-                        {Object.values(errors).map((value => (
+                        {Object.values(errors.username).map((value => (
+                            <li key={value}>{value}</li>
+                        )))}
+                    </ul>
+                </div>
+            )}
+            {(errors.password.length > 0) && (
+                <div className='ui error message'>
+                    <h3> Password Input Error </h3>
+                    <ul className='list'>
+                        {Object.values(errors.password).map((value => (
                             <li key={value}>{value}</li>
                         )))}
                     </ul>

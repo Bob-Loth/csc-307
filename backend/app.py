@@ -57,7 +57,8 @@ def register():
 
         new_user = Register(request.get_json())
 
-        if new_user.register_user(name, encrypt(pwd)):
+        if len(errors['username']) == 0 and len(errors['username']) == 0:
+            new_user.register_user(name, encrypt(pwd))
             resp = jsonify(success=True, errors=errors)
             return resp, 201
         else:
