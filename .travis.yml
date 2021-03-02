@@ -14,7 +14,7 @@ matrix:
       install:
         - pip install -r requirements.txt
       before_script:
-        - export PYTHONPATH=.
+        - export PYTHONPATH="${PYTHONPATH}:/home/travis/build/Bob-Loth/csc-307/backend/" && echo "set path"
       script:
         - python -m pycodestyle . --exclude=venv
         - python -m pytest -v
