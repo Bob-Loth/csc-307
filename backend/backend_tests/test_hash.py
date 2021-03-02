@@ -1,12 +1,12 @@
 #  testing encrypt and verify to make sure they correctly mirror each other
 import pytest
-from app.hash import encrypt, verify
+from utils.hash import encrypt, verify
 
 
 #  an empty password
 def test_encrypt_verify_empty():
     passwd = ""
-    ash = encrypt(passwd)
+    hash = encrypt(passwd)
     assert(verify(passwd, hash))
 
 
@@ -19,7 +19,7 @@ def test_encrypt_verify_simple():
 
 #  a password containing non-standard characters
 def test_encrypt_verify_weird():
-    passwd = "\n18(æ~/é♪"
+    passwd = "\n18(~/"
     hash = encrypt(passwd)
     assert(verify(passwd, hash))
 

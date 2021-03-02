@@ -13,8 +13,6 @@ matrix:
         - cd backend
       install:
         - pip install -r requirements.txt
-      before_script:
-        - cd backend_tests
       script:
         - python -m pycodestyle . --exclude=venv
         - python -m pytest -v
