@@ -173,7 +173,6 @@ function ProductInfoModal(props){
                   }
                   setErrors(errors)
                   if (errors === ""){
-                    console.log(errors)
                     editProductCallback(patchObj)
                   }
                   else{
