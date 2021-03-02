@@ -86,7 +86,7 @@ function SearchFilter() {
             </Table.Header>
             <Table.Body>
                 {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch}) => (
-                    <Table.Row key={name}>
+                    <Table.Row key={_id}>
                         <Table.HeaderCell>
                             <ProductInfoModal
                             _id={_id}
