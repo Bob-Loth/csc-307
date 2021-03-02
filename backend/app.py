@@ -81,4 +81,10 @@ def search():
         id = request.args.get("_id")
         productdb = Product()
         product = productdb.list_update(id, request.get_json())
-        return product
+        if product:
+            return product, 205
+        else:
+            return jsonify(status="something went wrong"), 404
+            # this would mean that the _id was not found. Not possible, unless
+            # another program manually modified the _id inbetween getting
+            # the table, and sending the patch request.

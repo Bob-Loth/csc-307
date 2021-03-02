@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import {useForm} from '../Utils/hooks'
 import axios from 'axios'
 import { Button, Modal, Form } from 'semantic-ui-react'
+import { toNumber } from 'lodash';
 
 function ProductInfoModal(props){
   const [open, setOpen] = useState(false);
@@ -68,7 +69,7 @@ function ProductInfoModal(props){
     if (props.sku !== values.sku) ret.sku = values.sku;
     if (props.category !== values.category) ret.category = values.category;
     if (props.expiration_date !== values.expiration_date) ret.expiration_date = values.expiration_date;
-    if (props.price !== values.price) ret.price = values.price;
+    if (props.price !== values.price) ret.price = toNumber(values.price);
     if (props.shipment_batch !== values.shipment_batch) ret.shipment_batch = values.shipment_batch;
     
     return ret
