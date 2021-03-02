@@ -11,13 +11,12 @@ matrix:
         - "3.9.1"
       before_install:
         - cd backend
+        - "export PYTHONPATH=$PYTHONPATH:$(pwd)"
       install:
         - pip install -r requirements.txt
-      before_script:
-        - export PYTHONPATH="${PYTHONPATH}:/home/travis/build/Bob-Loth/csc-307/backend/" && echo "set path"
       script:
         - python -m pycodestyle . --exclude=venv
-        - python -m pytest -v
+        - python -m pytest -v ./backend_tests/
     
     - language: node_js
       node_js:
