@@ -4,6 +4,7 @@ from utils.Verification import verify_password
     backend test cases for endpoint resolvers
 """
 
+
 # empty username testing
 def test_verify_empty_username():
     username = ''
