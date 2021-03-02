@@ -24,11 +24,8 @@ function ProductInfoModal(props){
   function editFormatting() {
     let errorString = "";
     let price = parseFloat(values.price, 10)
-    console.log("item.price",values.price)
-    console.log("price",price)
     // round price to 2 decimal places, return errors if not a positive number
     if (isNaN(price)){
-      console.log(typeof(price),typeof(values.price),price,values.price)
       errorString = errorString.concat("Price must be a number.\n")
     }
     else if (price < 0){

@@ -16,9 +16,7 @@ function Dashboard() {
     const {values} = useForm(loginUserCallback, initialState)
 
     function switchPage() {
-        console.log("hello");
         window.location.replace("http://localhost:3000");
-
     }
 
     function loginUserCallback() {

@@ -1,6 +1,9 @@
 import pymongo
-from bson import ObjectId
+import json
+from bson import json_util
+from bson.objectid import ObjectId
 from private_credentials import credentials
+from flask import jsonify
 
 
 class Model(dict):
@@ -10,6 +13,9 @@ class Model(dict):
     __getattr__ = dict.get
     __delattr__ = dict.__delitem__
     __setattr__ = dict.__setitem__
+
+    def parse_json(self, data):
+        return json.loads(json_util.dumps(data))
 
     def save(self):
         if not self._id:
@@ -107,3 +113,12 @@ class Product(Model):
         filter_category = str(filter_category)
         products = list(self.collection.find({filter_category: filter_item}))
         return products
+
+    # find_one_and_update returns original by default
+    # AFTER specifies to return the modified document
+    def list_update(self, id, updates):
+        product = self.parse_json(self.collection.find_one_and_update(
+            {"_id": ObjectId(id)},  # the filter
+            {'$set': updates},    # the things to update
+            new=True))  # return the updated object
+        return product
