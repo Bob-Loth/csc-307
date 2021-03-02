@@ -82,6 +82,7 @@ function ProductInfoModal(props){
       axios.patch(search_url_string + "?_id=" + values._id.toString(), patchObj)
         .then( (resp) => {
             console.log(resp.data)
+            window.location.reload()
         })
         .catch(err => {
             if (err.response) {
