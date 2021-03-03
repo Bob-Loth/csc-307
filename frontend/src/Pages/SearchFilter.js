@@ -4,6 +4,10 @@ import React, {useEffect, useReducer, useState} from 'react'
 import {useForm} from "../Utils/hooks";
 import {Form, Button} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
+<<<<<<< Updated upstream
+=======
+
+>>>>>>> Stashed changes
 
 import _ from 'lodash'
 
