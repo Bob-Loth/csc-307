@@ -124,7 +124,7 @@ class Search(Model):
     #         product["_id"] = str(product["_id"])
     #     return products
 
-    def find_filter(self, keyword, filter_category, 
+    def find_filter(self, keyword, filter_category,
             price_range, expiration, greaterThan):
 
         # get all products in collection
