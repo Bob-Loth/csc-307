@@ -105,103 +105,105 @@ class Product(Model):
 
 
 class Search(Model):
-	db_client = pymongo.MongoClient(credentials(), 27017)
-	collection = db_client["InventoryDB"]["InventoryColl"]
 
-	# def find(self, keyword):
-	#     products = list(self.collection.find({"name": keyword}))
-	#     print(keyword)
-	#     for product in products:
-	#         product["_id"] = str(product["_id"])
-	#     return products
+    db_client = pymongo.MongoClient(credentials(), 27017)
+    collection = db_client["InventoryDB"]["InventoryColl"]
 
-	def find_filter(self, keyword, filter_category, price_range, expiration):
+    # def find(self, keyword):
+    #     products = list(self.collection.find({"name": keyword}))
+    #     print(keyword)
+    #     for product in products:
+    #         product["_id"] = str(product["_id"])
+    #     return products
 
-		#get all products in collection
-		products = list(self.collection.find())
-		filteredProducts = []
-		today = date.today()
+    def find_filter(self, keyword, filter_category, price_range, expiration):
 
-		#workaround for above 50 filter
-		temp_range = price_range
-		if temp_range == 51:
-			temp_range = 50		
+        #get all products in collection
+        products = list(self.collection.find())
+        filteredProducts = []
+        today = date.today()
 
-		for product in products:
-			#name filter
-			#filter based on name if keyword present
-			if '' != keyword and keyword.lower() not in product['name'].lower():
-				continue	
-				
-			#---------------------------------------
+        #workaround for above 50 filter
+        temp_range = price_range
+        if temp_range == 51:
+            temp_range = 50     
 
-			#category filter
-			#filter based on category if filter is present
-			if '' != filter_category and filter_category != product['category']:
-				continue
-				
-			#---------------------------------------
+        for product in products:
+            #name filter
+            #filter based on name if keyword present
+            if '' != keyword and keyword.lower() not in product['name'].lower():
+                continue    
+                
+            #---------------------------------------
 
-			#price range filter
-			#filter based on price range if filter is present
-			if price_range != 0:
-			
-				# for less than filters, if product price is above filter price, remove product
-				if price_range < 51 and price_range < product['price']:
-					continue
-				# for greater than filters, if product price is below filter price, remove product
-				elif price_range >= 51:
+            #category filter
+            #filter based on category if filter is present
+            if '' != filter_category and filter_category != product['category']:
+                continue
+                
+            #---------------------------------------
 
-					#using workaround
-					if temp_range > product['price']:
-						continue
-						
-			#---------------------------------------
+            #price range filter
+            #filter based on price range if filter is present
+            if price_range != 0:
+            
+                # for less than filters, if product price is above filter price, remove product
+                if price_range < 51 and price_range < product['price']:
+                    continue
+                # for greater than filters, if product price is below filter price, remove product
+                elif price_range >= 51:
 
-
-
-			#filter based on price range if filter is present
-			if '0' != expiration:
-
-				#skip over if no expiry date
-				if 'N/A' == product['expiration_date']:
-					continue
-
-				dateToConvert = product['expiration_date']
-				month = int(dateToConvert[0:2])
-				day = int(dateToConvert[3:5])
-				year = int(dateToConvert[6:])
-
-				product_expiry = date(year, month, day)
-				
-
-				deadline = int(expiration)
+                    #using workaround
+                    if temp_range > product['price']:
+                        continue
+                        
+            #---------------------------------------
 
 
-				weeks = (((product_expiry - today).days) + 6) // 7
-				print(weeks, deadline, weeks > deadline)
 
-				if weeks > deadline:
-					continue
+            #filter based on price range if filter is present
+            if '0' != expiration:
 
-			filteredProducts.append(product)
+                #skip over if no expiry date
+                if 'N/A' == product['expiration_date']:
+                    continue
 
-				
-		#last steps
-		#Cast to list
-		#finalize formatting
-		for product in filteredProducts:
-			product["_id"] = str(product["_id"])
+                dateToConvert = product['expiration_date']
+                month = int(dateToConvert[0:2])
+                day = int(dateToConvert[3:5])
+                year = int(dateToConvert[6:])
+
+                product_expiry = date(year, month, day)
+                
+
+                deadline = int(expiration)
+
+
+                weeks = (((product_expiry - today).days) + 6) // 7
+                print(weeks, deadline, weeks > deadline)
+
+                if weeks > deadline:
+                    continue
+
+            filteredProducts.append(product)
+
+                
+        #last steps
+        #Cast to list
+        #finalize formatting
+        for product in filteredProducts:
+            product["_id"] = str(product["_id"])
         #--------------------------------------
 
-		return filteredProducts
-    	#todo : implement code which will find products based on the filter provided.
-
-    # find_one_and_update returns original by default
-    # AFTER specifies to return the modified document
+        return filteredProducts
+        
     def list_update(self, id, updates):
         product = self.parse_json(self.collection.find_one_and_update(
             {"_id": ObjectId(id)},  # the filter
             {'$set': updates},    # the things to update
             new=True))  # return the updated object
         return product
+    
+
+    # find_one_and_update returns original by default
+    # AFTER specifies to return the modified document

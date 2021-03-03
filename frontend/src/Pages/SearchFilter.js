@@ -4,7 +4,6 @@ import React, {useEffect, useReducer, useState} from 'react'
 import {useForm} from "../Utils/hooks";
 import {Form, Button} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
-import Select from "react-select"
 
 import _ from 'lodash'
 
@@ -20,7 +19,7 @@ function SearchFilter() {
         keyword: '',
     }
 
-    const {onChange, onSubmit, values} = useForm(searchForItems, initialState)
+    const {onChange, values} = useForm(searchForItems, initialState)
 
     function searchForItems() {       
         //once login button is clicked, send the fields to the backend and do
@@ -137,7 +136,7 @@ function SearchFilter() {
                     <Button type='submit' primary>
                         Search
                     </Button>
-                    <Button onClick={(e) => {
+                    <Button onClick={() => {
                         values.keyword=''
                         setPriceRange('0')
                         setCategory('')
