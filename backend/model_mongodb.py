@@ -126,8 +126,8 @@ class Search(Model):
         for product in products:
             # name filter
             # filter based on name if keyword present
-            if '' != keyword and keyword.lower() not in \
-              product['name'].lower():
+            if ('' != keyword and keyword.lower() not in 
+                    product['name'].lower()):
                 continue
             # ---------------------------------------
 
