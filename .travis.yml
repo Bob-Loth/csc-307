@@ -12,12 +12,11 @@ matrix:
       before_install:
         - cd backend
         - export PYTHONPATH=$PYTHONPATH:$(pwd)
-        - python setup.py install
       install:
         - pip install -r requirements.txt
       script:
         - python -m pycodestyle . --exclude=venv
-        - python -m pytest -v ./backend_tests/
+        - python -m pytest -v .
     
     - language: node_js
       node_js:
