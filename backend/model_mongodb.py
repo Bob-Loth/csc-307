@@ -2,7 +2,12 @@ import pymongo
 import json
 from bson import json_util
 from bson.objectid import ObjectId
-from private_credentials import credentials
+try:
+    from private_credentials import credentials
+except ModuleNotFoundError:
+    def credentials():
+        return 'localhost'
+
 from flask import jsonify
 
 
@@ -42,8 +47,11 @@ class Model(dict):
 
 
 class Login(Model):
-    db_client = pymongo.MongoClient(credentials(), 27017)
-    collection = db_client["InventoryDB"]["users"]
+    def __init__(self, db_client=pymongo.MongoClient(credentials(), 27017),
+                 collection=pymongo.MongoClient(credentials(), 27017)
+                 ["InventoryDB"]["users"]):
+        self.db_client = db_client
+        self.collection = collection
 
     def find_name_ret_hash(self, username):
         users = list(self.collection.find({"username": username}))

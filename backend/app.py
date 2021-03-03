@@ -6,7 +6,7 @@ from model_mongodb import *
 import jwt
 
 from hash import *
-from utils.Verification import verify_password
+from Verification import verify_password
 
 app = Flask(__name__)
 CORS(app)
