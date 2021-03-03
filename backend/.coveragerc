@@ -1,0 +1,6 @@
+[run]
+omit =
+    # omit this single file
+    test_hash.py
+    test_model_mongodb.py
+    test_username_pwd_verification.py
