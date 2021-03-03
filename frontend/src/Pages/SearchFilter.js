@@ -4,7 +4,7 @@ import React, {useEffect, useReducer, useState} from 'react'
 import {useForm} from "../Utils/hooks";
 import {Form, Button} from 'semantic-ui-react'
 import 'semantic-ui-css/semantic.min.css'
-
+import ProductInfoModal from '../Components/ProductInfoModal'
 import _ from 'lodash'
 
 function SearchFilter() {
@@ -152,6 +152,9 @@ function SearchFilter() {
                 <Table sortable celled fixed>
                 <Table.Header>
                     <Table.Row>
+                        <Table.HeaderCell>
+
+                        </Table.HeaderCell>
                         <Table.HeaderCell
                             sorted={column === 'name' ? direction : null}
                             onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'name'})}>
@@ -187,6 +190,18 @@ function SearchFilter() {
                 <Table.Body>
                     {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch}) => (
                         <Table.Row key={_id}>
+                            <Table.HeaderCell>
+                            <ProductInfoModal
+                            _id={_id}
+                            name={name}
+                            expiration_date={expiration_date}
+                            sku={sku}
+                            category={category}
+                            price={price}
+                            shipment_batch={shipment_batch}
+                            >
+                            </ProductInfoModal>
+                            </Table.HeaderCell>
                             <Table.Cell>{name}</Table.Cell>
                             <Table.Cell>{expiration_date}</Table.Cell>
                             <Table.Cell>{sku}</Table.Cell>
