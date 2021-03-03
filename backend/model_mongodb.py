@@ -14,7 +14,6 @@ except ModuleNotFoundError:
 from flask import jsonify
 
 
-
 class Model(dict):
     """
     A simple model that wraps mongodb document
@@ -126,40 +125,42 @@ class Search(Model):
         # workaround for above 50 filter
         temp_range = price_range
         if temp_range == 51:
-            temp_range = 50     
+            temp_range = 50
 
         for product in products:
             # name filter
             # filter based on name if keyword present
-            if '' != keyword and keyword.lower() not in product['name'].lower():
-                continue    
-                
+            if '' != keyword and keyword.lower() not in \
+              product['name'].lower():
+                continue
+
             # ---------------------------------------
 
             # category filter
             # filter based on category if filter is present
-            if '' != filter_category and filter_category != product['category']:
+            if ('' != filter_category and
+                    filter_category != product['category']):
                 continue
-                
+
             # ---------------------------------------
 
             # price range filter
             # filter based on price range if filter is present
             if price_range != 0:
-            
-                # for less than filters, if product price is above filter price, remove product
+
+                # for less than filters, if product price is above filter
+                # price, remove product
                 if price_range < 51 and price_range < product['price']:
                     continue
-                # for greater than filters, if product price is below filter price, remove product
+                # for greater than filters, if product price is below filter
+                # price, remove product
                 elif price_range >= 51:
 
                     # using workaround
                     if temp_range > product['price']:
                         continue
-                        
+
             # ---------------------------------------
-
-
 
             # filter based on price range if filter is present
             if '0' != expiration:
@@ -174,10 +175,8 @@ class Search(Model):
                 year = int(dateToConvert[6:])
 
                 product_expiry = date(year, month, day)
-                
 
                 deadline = int(expiration)
-
 
                 weeks = (((product_expiry - today).days) + 6) // 7
                 print(weeks, deadline, weeks > deadline)
@@ -187,7 +186,6 @@ class Search(Model):
 
             filteredProducts.append(product)
 
-                
         # last steps
         # Cast to list
         # finalize formatting
@@ -196,14 +194,13 @@ class Search(Model):
         # --------------------------------------
 
         return filteredProducts
-        
+
     def list_update(self, id, updates):
         product = self.parse_json(self.collection.find_one_and_update(
             {"_id": ObjectId(id)},  # the filter
             {'$set': updates},    # the things to update
             new=True))  # return the updated object
         return product
-    
 
     # find_one_and_update returns original by default
     # AFTER specifies to return the modified document
