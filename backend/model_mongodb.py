@@ -115,17 +115,14 @@ class Search(Model):
     #         product["_id"] = str(product["_id"])
     #     return products
 
-    def find_filter(self, keyword, filter_category, price_range, expiration):
+    def find_filter(self, keyword, filter_category, 
+        price_range, expiration, greaterThan):
 
         # get all products in collection
         products = list(self.collection.find())
         filteredProducts = []
         today = date.today()
 
-        # workaround for above 50 filter
-        temp_range = price_range
-        if temp_range == 51:
-            temp_range = 50
 
         for product in products:
             # name filter
@@ -150,14 +147,14 @@ class Search(Model):
 
                 # for less than filters, if product price is above filter
                 # price, remove product
-                if price_range < 51 and price_range < product['price']:
+                if greaterThan and price_range >= product['price']:
                     continue
                 # for greater than filters, if product price is below filter
                 # price, remove product
-                elif price_range >= 51:
+                elif not greaterThan:
 
                     # using workaround
-                    if temp_range > product['price']:
+                    if price_range <= product['price']:
                         continue
 
             # ---------------------------------------
