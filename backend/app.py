@@ -3,9 +3,10 @@ from flask import request
 from flask import jsonify
 from flask_cors import CORS
 from model_mongodb import *
+import jwt
 
 from hash import *
-from utils.Verification import verify_password
+from Verification import verify_password
 
 app = Flask(__name__)
 CORS(app)
@@ -25,18 +26,25 @@ def login():
         login = Login(login_attempt)
 
         db_hash = login.find_name_ret_hash(username)
-        if db_hash == False:
-            resp = jsonify(success=False, errors=verify_password(username, password))
-            return resp
+        error_dict = verify_password(username, password)
+        user = login.find_name_ret_hash(username)
+
+        encoded = jwt.encode({
+            'jwtToken': user
+        }, 'csc307_key_jwt', algorithm='HS256')
+
+        if db_hash is False:
+            resp = jsonify(success=False, errors=error_dict, hash='false')
+            return resp, 401
 
         match = verify(password, db_hash)
 
         if match:
-            resp = jsonify(success=True, errors=verify_password(username, password))
+            resp = jsonify(success=True, errors=error_dict, jwtToken=encoded)
+            return resp, 200
         else:
-            resp = jsonify(success=False, errors=verify_password(username, password))
-
-        return resp
+            resp = jsonify(success=False, errors=error_dict, verify='false')
+            return resp, 401
 
 
 @app.route('/register', methods=['POST'])
@@ -46,22 +54,25 @@ def register():
         pwd = request.get_json().get('pwd')
 
         errors = verify_password(name, pwd)
-        if not errors:
-            new_user = Register(request.get_json())
-            if new_user.register_user(name, encrypt(pwd)):
-                resp = jsonify(success=True, errors=errors)
-            else:
-                resp = jsonify(success=False, errors=errors)
-            return resp
+
+        new_user = Register(request.get_json())
+
+        if len(errors['username']) == 0 and len(errors['username']) == 0:
+            new_user.register_user(name, encrypt(pwd))
+            resp = jsonify(success=True, errors=errors)
+            return resp, 201
         else:
-            return jsonify(success=False, errors=errors)
+            resp = jsonify(success=False, errors=errors)
+            return resp, 409
 
 
 @app.route('/dashboard', methods=['POST'])
 def dashboard():
     return "dashboard"
 
-@app.route('/search', methods=['GET', 'POST'])
+
+
+@app.route('/search', methods=['GET', 'PATCH'])
 def search():
     if request.method == 'GET':
 
@@ -89,6 +100,17 @@ def search():
 
         productdb = Product()
         products = productdb.list_all()
-        app.logger.info(products)
+
         return jsonify(products=products)
-    
+    if request.method == 'PATCH':
+        id = request.args.get("_id")
+        productdb = Product()
+        product = productdb.list_update(id, request.get_json())
+        if product:
+            return product, 205
+        else:
+            return jsonify(status="something went wrong"), 404
+            # this would mean that the _id was not found. Not possible, unless
+            # another program manually modified the _id inbetween getting
+            # the table, and sending the patch request.
+

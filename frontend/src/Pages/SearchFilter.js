@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import {Table} from 'semantic-ui-react'
 import axios from 'axios'
 import React, {useEffect, useReducer, useState} from 'react'
@@ -8,8 +7,6 @@ import 'semantic-ui-css/semantic.min.css'
 import Select from "react-select"
 
 import _ from 'lodash'
-
-
 
 function SearchFilter() {
 
@@ -65,7 +62,6 @@ function SearchFilter() {
         axios.get(search_url_string)
             .then(res => {
                 setProductList(res.data.products); //{products=...,...,...}
-                //console.log(res.data.products[0].name);
             })
     }, [])
     
@@ -190,8 +186,8 @@ function SearchFilter() {
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {productList.map(({name, expiration_date, sku, category, price, shipment_batch}) => (
-                        <Table.Row key={name}>
+                    {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch}) => (
+                        <Table.Row key={_id}>
                             <Table.Cell>{name}</Table.Cell>
                             <Table.Cell>{expiration_date}</Table.Cell>
                             <Table.Cell>{sku}</Table.Cell>
