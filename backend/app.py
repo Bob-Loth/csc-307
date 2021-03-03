@@ -61,10 +61,34 @@ def register():
 def dashboard():
     return "dashboard"
 
-@app.route('/search', methods=['GET'])
+@app.route('/search', methods=['GET', 'POST'])
 def search():
     if request.method == 'GET':
+
+        #if there is json in the request run this
+        search_request = request.args
+        
+        print(search_request)
+        print("\n\n")
+        if search_request:
+            productdb = Search()
+
+            #set Params
+            keyword = search_request.get('keyword')
+            filter_category = search_request.get('filterCategory')
+
+            #cast to int
+            price_range = search_request.get('priceRange')
+            price_range = int(price_range)
+
+            expiry = search_request.get('expiry')
+            #------------------------------------
+
+            products = productdb.find_filter(keyword, filter_category, price_range, expiry)
+            return jsonify(products=products)
+
         productdb = Product()
         products = productdb.list_all()
         app.logger.info(products)
         return jsonify(products=products)
+    
