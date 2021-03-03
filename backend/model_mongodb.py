@@ -123,14 +123,12 @@ class Search(Model):
         filteredProducts = []
         today = date.today()
 
-
         for product in products:
             # name filter
             # filter based on name if keyword present
             if '' != keyword and keyword.lower() not in \
               product['name'].lower():
                 continue
-
             # ---------------------------------------
 
             # category filter
@@ -156,7 +154,6 @@ class Search(Model):
                     # using workaround
                     if price_range <= product['price']:
                         continue
-
             # ---------------------------------------
 
             # filter based on price range if filter is present
