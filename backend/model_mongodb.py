@@ -157,7 +157,7 @@ class Search(Model):
                     if temp_range > product['price']:
                         continue
                         
-            #---------------------------------------
+            # ---------------------------------------
 
 
 
