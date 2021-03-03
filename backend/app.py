@@ -88,7 +88,6 @@ def search():
             filter_category = search_request.get('filterCategory')
             greaterThan = False
 
-
             # remove comparison and cast to int
             price_range = search_request.get('priceRange')
             if price_range != 'none':
@@ -97,8 +96,6 @@ def search():
                 price_range = int(price_range[1:])
             else:
                 price_range = 0
-
-        
 
             expiry = search_request.get('expiry')
             #  ------------------------------------
