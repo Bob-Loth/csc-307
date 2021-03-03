@@ -118,33 +118,33 @@ class Search(Model):
 
     def find_filter(self, keyword, filter_category, price_range, expiration):
 
-        #get all products in collection
+        # get all products in collection
         products = list(self.collection.find())
         filteredProducts = []
         today = date.today()
 
-        #workaround for above 50 filter
+        # workaround for above 50 filter
         temp_range = price_range
         if temp_range == 51:
             temp_range = 50     
 
         for product in products:
-            #name filter
-            #filter based on name if keyword present
+            # name filter
+            # filter based on name if keyword present
             if '' != keyword and keyword.lower() not in product['name'].lower():
                 continue    
                 
-            #---------------------------------------
+            # ---------------------------------------
 
-            #category filter
-            #filter based on category if filter is present
+            # category filter
+            # filter based on category if filter is present
             if '' != filter_category and filter_category != product['category']:
                 continue
                 
-            #---------------------------------------
+            # ---------------------------------------
 
-            #price range filter
-            #filter based on price range if filter is present
+            # price range filter
+            # filter based on price range if filter is present
             if price_range != 0:
             
                 # for less than filters, if product price is above filter price, remove product
@@ -153,7 +153,7 @@ class Search(Model):
                 # for greater than filters, if product price is below filter price, remove product
                 elif price_range >= 51:
 
-                    #using workaround
+                    # using workaround
                     if temp_range > product['price']:
                         continue
                         
@@ -161,10 +161,10 @@ class Search(Model):
 
 
 
-            #filter based on price range if filter is present
+            # filter based on price range if filter is present
             if '0' != expiration:
 
-                #skip over if no expiry date
+                # skip over if no expiry date
                 if 'N/A' == product['expiration_date']:
                     continue
 
@@ -188,12 +188,12 @@ class Search(Model):
             filteredProducts.append(product)
 
                 
-        #last steps
-        #Cast to list
-        #finalize formatting
+        # last steps
+        # Cast to list
+        # finalize formatting
         for product in filteredProducts:
             product["_id"] = str(product["_id"])
-        #--------------------------------------
+        # --------------------------------------
 
         return filteredProducts
         
