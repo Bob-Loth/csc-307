@@ -1,1 +1,22 @@
-[{"_id":{"$oid":"602c478f5830f02be4269738"},"name":"Grapes","sku":"SKU#00000812","category":"Produce","expiration_date":"3-25-2021","price":{"$numberDouble":"3.99"},"shipment_batch":"S#51045"}]
+[
+    {"_id":{"$oid":"602c478f5830f02be4269738"},"name":"Grapes","sku":"SKU#00000812","category":"Produce","expiration_date":"3-25-2021","price":{"$numberDouble":"3.99"},"shipment_batch":"S#51045"},
+    {"_id":{"$oid":"602c478f5830f02be426973b"},"name":"Dishwasher","sku":"SKU#00010017","category":"Home Appliances","expiration_date":"N/A","price":{"$numberDouble":"999.99"},"shipment_batch":"S#45"},
+    {"_id":{"$oid":"602c478f5830f02be426973a"},"name":"Postage Stamp","sku":"SKU#00001004","category":"Miscellaneous","expiration_date":"N/A","price":{"$numberDouble":"0.05"},"shipment_batch":"S#46"},
+    {"_id":{"$oid":"602c478f5830f02be4269739"},"name":"OJ Gallon","sku":"SKU#00001003","category":"Produce","expiration_date":"2-31-2021","price":{"$numberDouble":"5.0"},"shipment_batch":"S#45"},
+    {"_id":{"$oid":"602c478f5830f02be4269737"},"name":"Assorted Spices","sku":"SKU#00001001","category":"Cooking","expiration_date":"2-16-2025","price":{"$numberDouble":"12.49"},"shipment_batch":"S#45"},
+    {"_id":{"$oid":"603dc23efb89b823bcc0ce98"},"name":"4k Smart TV","sku":"SKU#00009708","category":"Electronics","expiration_date":"N/A","price":"499.00","shipment_batch":"S#47"},
+    {"_id":{"$oid":"603dc2fcfb89b823bcc0ce99"},"name":"1000W Microwave","sku":"SKU#00008484","category":"Home Appliances","expiration_date":"N/A","price":"250.00","shipment_batch":"S#47"},
+    {"_id":{"$oid":"603dc2fefb89b823bcc0ce9a"},"name":"HDMI Cable","sku":"SKU#00001049","category":"Electronics","expiration_date":"N/A","price":{"$numberDouble":"14.99"},"shipment_batch":"S#49"},
+    {"_id":{"$oid":"603dc300fb89b823bcc0ce9b"},"name":"Micro Fridge","sku":"SKU#00009944","category":"Home Appliances","expiration_date":"N/A","price":{"$numberDouble":"89.99"},"shipment_batch":"S#45"},
+    {"_id":{"$oid":"603dc302fb89b823bcc0ce9c"},"name":"Bluetooth Speaker","sku":"SKU#00009004","category":"Electronics","expiration_date":"N/A","price":{"$numberDouble":"34.99"},"shipment_batch":"S#48"},
+    {"_id":{"$oid":"603dc304fb89b823bcc0ce9d"},"name":"Pumpkin Squash","sku":"SKU#00006243","category":"Produce","expiration_date":"3-25-2021","price":{"$numberDouble":"2.99"},"shipment_batch":"S#48"},
+    {"_id":{"$oid":"603dc306fb89b823bcc0ce9e"},"name":"Pear","sku":"SKU#00001470","category":"Produce","expiration_date":"N/A","price":{"$numberDouble":"0.99"},"shipment_batch":"S#48"},
+    {"_id":{"$oid":"603dc308fb89b823bcc0ce9f"},"name":"Bluetooth Headphones","sku":"SKU#00009999","category":"Electronics","expiration_date":"N/A","price":{"$numberDouble":"104.99"},"shipment_batch":"S#49"},
+    {"_id":{"$oid":"603dc309fb89b823bcc0cea0"},"name":"HDMI Adapter","sku":"SKU#00001002","category":"Electronics","expiration_date":"N/A","price":{"$numberDouble":"4.99"},"shipment_batch":"S#45"},
+    {"_id":{"$oid":"603dc30bfb89b823bcc0cea1"},"name":"Whole Turkey","sku":"SKU#00008987","category":"Poultry","expiration_date":"3-10-2021","price":{"$numberDouble":"29.95"},"shipment_batch":"S#48"},
+    {"_id":{"$oid":"603dc30dfb89b823bcc0cea2"},"name":"Chicken Breast","sku":"SKU#00408234","category":"Poultry","expiration_date":"3-19-2021","price":{"$numberDouble":"12.99"},"shipment_batch":"S#48"},
+    {"_id":{"$oid":"603dc30efb89b823bcc0cea3"},"name":"15W FM transmitter","sku":"SKU#07185321","category":"Electronics","expiration_date":"N/A","price":{"$numberDouble":"119.99"},"shipment_batch":"S#48"},
+    {"_id":{"$oid":"603dc310fb89b823bcc0cea4"},"name":"Chicken Thighs","sku":"SKU#00987665","category":"Poultry","expiration_date":"3-13-2021","price":{"$numberDouble":"7.99"},"shipment_batch":"S#48"},
+    {"_id":{"$oid":"603dc313fb89b823bcc0cea5"},"name":"Grapefruit","sku":"SKU#00004742","category":"Produce","expiration_date":"3-16-2021","price":{"$numberDouble":"1.39"},"shipment_batch":"S#48"},
+    {"_id":{"$oid":"603dc315fb89b823bcc0cea6"},"name":"Banana","sku":"SKU#00006789","category":"Produce","expiration_date":"3-16-2021","price":{"$numberDouble":"0.79"},"shipment_batch":"S#48"}
+]
