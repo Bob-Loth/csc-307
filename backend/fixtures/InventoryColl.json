@@ -1,0 +1,1 @@
+[{"_id":{"$oid":"602c478f5830f02be4269738"},"name":"Grapes","sku":"SKU#00000812","category":"Produce","expiration_date":"3-25-2021","price":{"$numberDouble":"3.99"},"shipment_batch":"S#51045"}]
