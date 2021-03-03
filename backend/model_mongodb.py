@@ -124,8 +124,8 @@ class Search(Model):
     #         product["_id"] = str(product["_id"])
     #     return products
 
-    def find_filter(self, keyword, filter_category, 
-        price_range, expiration, greaterThan):
+    def find_filter(self, keyword, filter_category,
+                    price_range, expiration, greaterThan):
 
         # get all products in collection
         products = list(self.collection.find())
@@ -135,7 +135,7 @@ class Search(Model):
         for product in products:
             # name filter
             # filter based on name if keyword present
-            if ('' != keyword and keyword.lower() not in 
+            if ('' != keyword and keyword.lower() not in
                     product['name'].lower()):
                 continue
             # ---------------------------------------
