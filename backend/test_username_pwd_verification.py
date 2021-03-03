@@ -1,4 +1,5 @@
-from utils.Verification import verify_password
+import pytest
+from Verification import verify_password
 
 """
     backend test cases for endpoint resolvers

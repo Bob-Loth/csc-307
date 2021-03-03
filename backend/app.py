@@ -71,9 +71,20 @@ def dashboard():
     return "dashboard"
 
 
-@app.route('/search', methods=['GET'])
+@app.route('/search', methods=['GET', 'PATCH'])
 def search():
     if request.method == 'GET':
         productdb = Product()
         products = productdb.list_all()
         return jsonify(products=products)
+    if request.method == 'PATCH':
+        id = request.args.get("_id")
+        productdb = Product()
+        product = productdb.list_update(id, request.get_json())
+        if product:
+            return product, 205
+        else:
+            return jsonify(status="something went wrong"), 404
+            # this would mean that the _id was not found. Not possible, unless
+            # another program manually modified the _id inbetween getting
+            # the table, and sending the patch request.

@@ -11,13 +11,12 @@ matrix:
         - "3.9.1"
       before_install:
         - cd backend
+        - export PYTHONPATH=$PYTHONPATH:$(pwd)
       install:
         - pip install -r requirements.txt
-      before_script:
-        - cd backend_tests
       script:
         - python -m pycodestyle . --exclude=venv
-        - python -m pytest -v
+        - python -m pytest -v .
     
     - language: node_js
       node_js:

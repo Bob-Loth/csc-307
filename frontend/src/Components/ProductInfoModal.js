@@ -2,11 +2,12 @@ import React, {useState} from 'react'
 import {useForm} from '../Utils/hooks'
 import axios from 'axios'
 import { Button, Modal, Form } from 'semantic-ui-react'
+import { toNumber } from 'lodash';
 
 function ProductInfoModal(props){
   const [open, setOpen] = useState(false);
   const [errors, setErrors] = useState("");
-  const search_url_string = "http://localhost:3000/search"
+  const search_url_string = "http://localhost:5000/search"
   const initialState = {
     _id: props._id,
     name: props.name,
@@ -24,11 +25,8 @@ function ProductInfoModal(props){
   function editFormatting() {
     let errorString = "";
     let price = parseFloat(values.price, 10)
-    console.log("item.price",values.price)
-    console.log("price",price)
     // round price to 2 decimal places, return errors if not a positive number
     if (isNaN(price)){
-      console.log(typeof(price),typeof(values.price),price,values.price)
       errorString = errorString.concat("Price must be a number.\n")
     }
     else if (price < 0){
@@ -71,7 +69,7 @@ function ProductInfoModal(props){
     if (props.sku !== values.sku) ret.sku = values.sku;
     if (props.category !== values.category) ret.category = values.category;
     if (props.expiration_date !== values.expiration_date) ret.expiration_date = values.expiration_date;
-    if (props.price !== values.price) ret.price = values.price;
+    if (props.price !== values.price) ret.price = toNumber(values.price);
     if (props.shipment_batch !== values.shipment_batch) ret.shipment_batch = values.shipment_batch;
     
     return ret
@@ -84,6 +82,7 @@ function ProductInfoModal(props){
       axios.patch(search_url_string + "?_id=" + values._id.toString(), patchObj)
         .then( (resp) => {
             console.log(resp.data)
+            window.location.reload()
         })
         .catch(err => {
             if (err.response) {
@@ -174,7 +173,6 @@ function ProductInfoModal(props){
                   }
                   setErrors(errors)
                   if (errors === ""){
-                    console.log(errors)
                     editProductCallback(patchObj)
                   }
                   else{
