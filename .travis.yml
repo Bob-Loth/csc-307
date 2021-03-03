@@ -1,0 +1,29 @@
+branches:
+  only: #this is a whitelist for branches to build on, add if you want to build on yours as well
+    - dev
+    - bob
+    - david
+matrix:
+  include:
+    - language: python
+      python:
+        - "3.8.0"
+        - "3.9.1"
+      before_install:
+        - cd backend
+        - export PYTHONPATH=$PYTHONPATH:$(pwd)
+      install:
+        - pip install -r requirements.txt
+      script:
+        - python -m pycodestyle . --exclude=venv
+        - python -m pytest -v --cov=. --cov-config=.coveragerc
+    
+    - language: node_js
+      node_js:
+        - node
+      before_install:
+        - cd frontend
+      install:
+        - npm install 
+      script:
+        - npx eslint src

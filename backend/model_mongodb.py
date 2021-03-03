@@ -1,6 +1,17 @@
 import pymongo
-from bson import ObjectId
-from private_credentials import credentials
+
+import time
+from datetime import date, datetime, timedelta
+import json
+from bson import json_util
+from bson.objectid import ObjectId
+try:
+    from private_credentials import credentials
+except ModuleNotFoundError:
+    def credentials():
+        return 'localhost'
+
+from flask import jsonify
 
 
 class Model(dict):
@@ -10,6 +21,9 @@ class Model(dict):
     __getattr__ = dict.get
     __delattr__ = dict.__delitem__
     __setattr__ = dict.__setitem__
+
+    def parse_json(self, data):
+        return json.loads(json_util.dumps(data))
 
     def save(self):
         if not self._id:
@@ -35,32 +49,12 @@ class Model(dict):
             return resp
 
 
-class User(Model):
-    db_client = pymongo.MongoClient('localhost', 27017)
-    collection = db_client["users"]["users_list"]
-
-    def find_all(self):
-        users = list(self.collection.find())
-        for user in users:
-            user["_id"] = str(user["_id"])
-        return users
-
-    def find_by_name_job(self, name, job):
-        users = list(self.collection.find({"name": name, "job": job}))
-        for user in users:
-            user["_id"] = str(user["_id"])
-        return users
-
-    def find_by_name(self, name):
-        users = list(self.collection.find({"name": name}))
-        for user in users:
-            user["_id"] = str(user["_id"])
-        return users
-
-
 class Login(Model):
-    db_client = pymongo.MongoClient(credentials(), 27017)
-    collection = db_client["InventoryDB"]["users"]
+    def __init__(self, db_client=pymongo.MongoClient(credentials(), 27017),
+                 collection=pymongo.MongoClient(credentials(), 27017)
+                 ["InventoryDB"]["users"]):
+        self.db_client = db_client
+        self.collection = collection
 
     def find_name_ret_hash(self, username):
         users = list(self.collection.find({"username": username}))
@@ -87,7 +81,8 @@ class Register(Model):
             return False
         else:
             # db_ret is the _id field of the registered user
-            db_ret = self.collection.insert_one({"username": user, "password": hash})
+            db_ret = self.collection.insert_one(
+                {"username": user, "password": hash})
             return True
 
 
@@ -106,3 +101,109 @@ class Product(Model):
         filter_category = str(filter_category)
         products = list(self.collection.find({filter_category: filter_item}))
         return products
+
+    # find_one_and_update returns original by default
+    # AFTER specifies to return the modified document
+    def list_update(self, id, updates):
+        product = self.parse_json(self.collection.find_one_and_update(
+            {"_id": ObjectId(id)},  # the filter
+            {'$set': updates},    # the things to update
+            new=True))  # return the updated object
+        return product
+
+
+class Search(Model):
+
+    db_client = pymongo.MongoClient(credentials(), 27017)
+    collection = db_client["InventoryDB"]["InventoryColl"]
+
+    # def find(self, keyword):
+    #     products = list(self.collection.find({"name": keyword}))
+    #     print(keyword)
+    #     for product in products:
+    #         product["_id"] = str(product["_id"])
+    #     return products
+
+    def find_filter(self, keyword, filter_category,
+                    price_range, expiration, greaterThan):
+
+        # get all products in collection
+        products = list(self.collection.find())
+        filteredProducts = []
+        today = date.today()
+
+        for product in products:
+            # name filter
+            # filter based on name if keyword present
+            if ('' != keyword and keyword.lower() not in
+                    product['name'].lower()):
+                continue
+            # ---------------------------------------
+
+            # category filter
+            # filter based on category if filter is present
+            if ('' != filter_category and
+                    filter_category != product['category']):
+                continue
+
+            # ---------------------------------------
+
+            # price range filter
+            # filter based on price range if filter is present
+            if price_range != 0:
+
+                # for less than filters, if product price is above filter
+                # price, remove product
+                if greaterThan and price_range >= product['price']:
+                    continue
+                # for greater than filters, if product price is below filter
+                # price, remove product
+                elif not greaterThan:
+
+                    # using workaround
+                    if price_range <= product['price']:
+                        continue
+            # ---------------------------------------
+
+            # filter based on price range if filter is present
+            if '0' != expiration:
+
+                # skip over if no expiry date
+                if 'N/A' == product['expiration_date']:
+                    continue
+
+                dateToConvert = product['expiration_date']
+                month = int(dateToConvert[0:2])
+                day = int(dateToConvert[3:5])
+                year = int(dateToConvert[6:])
+
+                product_expiry = date(year, month, day)
+
+                deadline = int(expiration)
+
+                weeks = (((product_expiry - today).days) + 6) // 7
+                print(weeks, deadline, weeks > deadline)
+
+                if weeks > deadline:
+                    continue
+
+            filteredProducts.append(product)
+
+        # last steps
+        # Cast to list
+        # finalize formatting
+        for product in filteredProducts:
+            product["_id"] = str(product["_id"])
+        # --------------------------------------
+
+        return filteredProducts
+
+    def list_update(self, id, updates):
+        product = self.parse_json(self.collection.find_one_and_update(
+            {"_id": ObjectId(id)},  # the filter
+            {'$set': updates},    # the things to update
+            new=True))  # return the updated object
+        return product
+
+    # find_one_and_update returns original by default
+    # AFTER specifies to return the modified document
