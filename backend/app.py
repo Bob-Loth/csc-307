@@ -86,16 +86,22 @@ def search():
             #  set Params
             keyword = search_request.get('keyword')
             filter_category = search_request.get('filterCategory')
+            greaterThan = False
 
-            #  cast to int
+            # remove comparison and cast to int
             price_range = search_request.get('priceRange')
-            price_range = int(price_range)
+            if price_range != 'none':
+                if price_range[0] == '>':
+                    greaterThan = True
+                price_range = int(price_range[1:])
+            else:
+                price_range = 0
 
             expiry = search_request.get('expiry')
             #  ------------------------------------
 
             products = productdb.find_filter(keyword, filter_category,
-                                             price_range, expiry)
+                                             price_range, expiry, greaterThan)
             return jsonify(products=products)
 
         productdb = Product()

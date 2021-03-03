@@ -13,7 +13,7 @@ function SearchFilter() {
     const [productList, setProductList] = useState([])
     const [exp, setExp] = useState('0')
     const [filterCategory, setCategory] = useState('')
-    const [priceRange, setPriceRange] = useState(0)
+    const [priceRange, setPriceRange] = useState('none')
 
     const initialState = {
         keyword: '',
@@ -123,12 +123,12 @@ function SearchFilter() {
                             setPriceRange(pr);
                             console.log(pr)
                         }}>
-                            <option value="0">None</option>
-                            <option value="10">Below $10</option>
-                            <option value="20">Below $20</option>
-                            <option value="50">Below $50</option>
-                            <option value="51">Above $50</option>
-                            <option value="100">Above $100</option>
+                            <option value="none">None</option>
+                            <option value="<10">Below $10</option>
+                            <option value="<20">Below $20</option>
+                            <option value="<50">Below $50</option>
+                            <option value=">50">Above $50</option>
+                            <option value=">100">Above $100</option>
                         </select>
 
                     </div>
@@ -138,7 +138,7 @@ function SearchFilter() {
                     </Button>
                     <Button onClick={() => {
                         values.keyword=''
-                        setPriceRange('0')
+                        setPriceRange('none')
                         setCategory('')
                         setExp('0')
                     }}>
