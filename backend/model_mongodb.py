@@ -102,6 +102,15 @@ class Product(Model):
         products = list(self.collection.find({filter_category: filter_item}))
         return products
 
+    # find_one_and_update returns original by default
+    # AFTER specifies to return the modified document
+    def list_update(self, id, updates):
+        product = self.parse_json(self.collection.find_one_and_update(
+            {"_id": ObjectId(id)},  # the filter
+            {'$set': updates},    # the things to update
+            new=True))  # return the updated object
+        return product
+
 
 class Search(Model):
 
