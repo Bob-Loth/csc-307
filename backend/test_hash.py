@@ -1,6 +1,6 @@
 #  testing encrypt and verify to make sure they correctly mirror each other
 import pytest
-from utils.hash import encrypt, verify
+from hash import encrypt, verify
 
 
 #  an empty password

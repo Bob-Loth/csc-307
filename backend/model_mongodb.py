@@ -41,29 +41,6 @@ class Model(dict):
             return resp
 
 
-class User(Model):
-    db_client = pymongo.MongoClient('localhost', 27017)
-    collection = db_client["users"]["users_list"]
-
-    def find_all(self):
-        users = list(self.collection.find())
-        for user in users:
-            user["_id"] = str(user["_id"])
-        return users
-
-    def find_by_name_job(self, name, job):
-        users = list(self.collection.find({"name": name, "job": job}))
-        for user in users:
-            user["_id"] = str(user["_id"])
-        return users
-
-    def find_by_name(self, name):
-        users = list(self.collection.find({"name": name}))
-        for user in users:
-            user["_id"] = str(user["_id"])
-        return users
-
-
 class Login(Model):
     db_client = pymongo.MongoClient(credentials(), 27017)
     collection = db_client["InventoryDB"]["users"]
