@@ -2,7 +2,12 @@ import pymongo
 import json
 from bson import json_util
 from bson.objectid import ObjectId
-from private_credentials import credentials
+try:
+    from private_credentials import credentials
+except ModuleNotFoundError:
+    def credentials():
+        return 'localhost'
+
 from flask import jsonify
 
 
