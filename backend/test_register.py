@@ -30,6 +30,13 @@ class TestRegister():
         assert r.json()['errors']['password'] == ['Illegal character' +
                                                   ' detected: /']
 
+        # assert that no user was created with invalid name/pwd
+        conn = pymongo.MongoClient(credentials(), 27017)
+        db = conn['InventoryDB']['users']
+        del_op = db.delete_one({'username': 'gawe>bWE'})
+        conn.close()
+        assert del_op.deleted_count == 0
+
     # should return 409, indicating that username or password was empty
     def test_register_empty_username_password(self):
         data_to_send = {'name': '', 'pwd': ''}
@@ -38,6 +45,13 @@ class TestRegister():
         assert r.status_code == 409
         assert r.json()['errors']['username'] == ['Username must not be empty']
         assert r.json()['errors']['password'] == ['Password must not be empty']
+
+        # assert that no user was created with invalid name/pwd
+        conn = pymongo.MongoClient(credentials(), 27017)
+        db = conn['InventoryDB']['users']
+        del_op = db.delete_one({'username': ''})
+        conn.close()
+        assert del_op.deleted_count == 0
 
     # should return 201, indicating that user was successfully registered.
     def test_register_success(self):
