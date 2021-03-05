@@ -60,7 +60,7 @@ class TestRegister():
         data_to_send = {'name': 'test-bfghaWBJJefluigyh', 'pwd': 'p1234'}
         r = requests.post(base_url + 'register', data=json.dumps(data_to_send),
                           headers=header)
-        
+
         assert r.json()['errors']['username'] == []
         assert r.json()['errors']['password'] == []
         assert r.status_code == 201
