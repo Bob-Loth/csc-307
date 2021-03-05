@@ -1,8 +1,9 @@
 import requests
 from flask import jsonify
+import pymongo
 import json
 from bson.objectid import ObjectId
-from model_mongodb import *
+from private_credentials import credentials
 
 
 base_url = 'http://localhost:5000/'
@@ -61,6 +62,8 @@ class TestRegister():
                           headers=header)
         assert r.status_code == 201
         assert r.json()['success'] is True
+        assert r.json()['errors']['username'] == []
+        assert r.json()['errors']['password'] == []
 
         # cleanup of registered test user
         conn = pymongo.MongoClient(credentials(), 27017)
