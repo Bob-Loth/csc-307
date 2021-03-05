@@ -60,11 +60,11 @@ class TestRegister():
         data_to_send = {'name': 'test-bfghaWBJJefluigyh', 'pwd': 'p1234'}
         r = requests.post(base_url + 'register', data=json.dumps(data_to_send),
                           headers=header)
-        assert r.status_code == 201
-        assert r.json()['success'] is True
+        
         assert r.json()['errors']['username'] == []
         assert r.json()['errors']['password'] == []
-
+        assert r.status_code == 201
+        assert r.json()['success'] is True
         # cleanup of registered test user
         conn = pymongo.MongoClient(credentials(), 27017)
         db = conn['InventoryDB']['users']
