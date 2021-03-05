@@ -58,15 +58,19 @@ def register():
         new_user = Register(request.get_json())
 
         if len(errors['username']) == 0 and len(errors['username']) == 0:
-            new_user.register_user(name, encrypt(pwd))
-            resp = jsonify(success=True, errors=errors)
-            return resp, 201
+            if(new_user.register_user(name, encrypt(pwd))):
+                resp = jsonify(success=True, errors=errors)
+                return resp, 201
+            else:
+                errors['username'].append('User already registered')
+                resp = jsonify(success=False, errors=errors)
+                return resp, 409
         else:
             resp = jsonify(success=False, errors=errors)
             return resp, 409
 
 
-@app.route('/dashboard', methods=['POST'])
+@app.route('/dashboard', methods=['GET'])
 def dashboard():
     return "dashboard"
 
