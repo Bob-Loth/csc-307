@@ -9,14 +9,6 @@ base_url = 'http://localhost:5000/'
 header = {'content-type': 'application/json'}
 
 
-class TestDashboard():
-    # basic dashboard test
-    def test_dashboard_basic(self):
-        r = requests.get(base_url + 'dashboard')
-        assert r.status_code == 200
-        assert r.text == 'dashboard'
-
-
 class TestRegister():
     # should return 409, indicating that User is already registered.
     def test_register_duplicate(self):
