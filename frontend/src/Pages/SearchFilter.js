@@ -1,14 +1,39 @@
 import {Table} from 'semantic-ui-react'
 import axios from 'axios'
 import React, {useEffect, useReducer, useState} from 'react'
+import {useForm} from "../Utils/hooks";
+import {Form, Button} from 'semantic-ui-react'
+import 'semantic-ui-css/semantic.min.css'
 import ProductInfoModal from '../Components/ProductInfoModal'
 import _ from 'lodash'
 
 function SearchFilter() {
 
     const search_url_string = "http://localhost:5000/search";
-
     const [productList, setProductList] = useState([])
+    const [exp, setExp] = useState('0')
+    const [filterCategory, setCategory] = useState('')
+    const [priceRange, setPriceRange] = useState('none')
+
+    const initialState = {
+        keyword: '',
+    }
+
+    const {onChange, values} = useForm(searchForItems, initialState)
+
+    function searchForItems() {       
+        //once login button is clicked, send the fields to the backend and do
+        //something with the response
+        axios.get(search_url_string, {params: {
+                                        'keyword': values.keyword,
+                                        'expiry': exp,
+                                        'filterCategory': filterCategory,
+                                        'priceRange': priceRange,}})
+          .then( (resp) => {
+                setProductList(resp.data.products);
+            });
+    }
+
 
     function reducer(state, action) {
         switch (action.type) {
@@ -46,48 +71,126 @@ function SearchFilter() {
     const { column, direction } = state;
     return (
         <div>
-            <Table sortable celled fixed>
-            <Table.Header>
-                <Table.Row>
-                    <Table.HeaderCell>
-
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                        sorted={column === 'name' ? direction : null}
-                        onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'name'})}>
-                        Name
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                        sorted={column === 'expiration_date' ? direction : null}
-                        onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'expiration_date'})}>
-                        Expiration Date
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                        sorted={column === 'sku' ? direction : null}
-                        onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'sku'})}>
-                        SKU
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                        sorted={column === 'category' ? direction : null}
-                        onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'category'})}>
+            <div>
+                <Form onSubmit={searchForItems} noValidate className=''>
+                  
+                    <h1> Search </h1>
+                    <Form.Input
+                        placeholder='search...'
+                        name='keyword'
+                        value={values.keyword}
+                        onChange={onChange}
+                    />
+                    <div>
+                        <h4>Filters:</h4>
+                        
+                        Expiry
+                        <select
+                        value = {exp} 
+                        onChange={(e) =>{
+                            
+                            const expiry = e.target.value;
+                            setExp(expiry);
+                            console.log(expiry)
+                        }}>
+                            <option value='0'>None</option>
+                            <option value='1'>Within One Week</option>
+                            <option value='2'>Within Two Weeks</option>
+                        </select>
                         Category
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                        sorted={column === 'price' ? direction : null}
-                        onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'price'})}>
-                        Price (USD)
-                    </Table.HeaderCell>
-                    <Table.HeaderCell
-                        sorted={column === 'shipment_batch' ? direction : null}
-                        onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'shipment_batch'})}>
-                        Shipment ID
-                    </Table.HeaderCell>
-                </Table.Row>
-            </Table.Header>
-            <Table.Body>
-                {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch}) => (
-                    <Table.Row key={_id}>
+                        <select
+                        value = {filterCategory} 
+                        onChange={(e) =>{
+                            
+                            const cat = e.target.value;
+                            setCategory(cat);
+                            console.log(cat)
+                        }}>
+                            <option value=''>None</option>
+                            <option value='Cooking'>Cooking</option>
+                            <option value='Electronics'>Electronics</option>
+                            <option value='Home Appliances'>Home Appliances</option>
+                            <option value='Miscellaneous'>Miscellaneous</option>
+                            <option value='Poultry'>Poultry</option>
+                            <option value='Produce'>Produce</option>
+                        </select>
+                        Price Range
+                        <select
+                        value = {priceRange} 
+                        onChange={(e) =>{
+                            
+                            const pr = e.target.value;
+                            setPriceRange(pr);
+                            console.log(pr)
+                        }}>
+                            <option value="none">None</option>
+                            <option value="<10">Below $10</option>
+                            <option value="<20">Below $20</option>
+                            <option value="<50">Below $50</option>
+                            <option value=">50">Above $50</option>
+                            <option value=">100">Above $100</option>
+                        </select>
+
+                    </div>
+                    <br/>
+                    <Button type='submit' primary>
+                        Search
+                    </Button>
+                    <Button onClick={() => {
+                        values.keyword=''
+                        setPriceRange('none')
+                        setCategory('')
+                        setExp('0')
+                    }}>
+                        Clear Filters
+                    </Button>
+                </Form>
+            </div>
+            <p/>
+
+            <div>
+                <Table sortable celled fixed>
+                <Table.Header>
+                    <Table.Row>
                         <Table.HeaderCell>
+
+                        </Table.HeaderCell>
+                        <Table.HeaderCell
+                            sorted={column === 'name' ? direction : null}
+                            onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'name'})}>
+                            Name
+                        </Table.HeaderCell>
+                        <Table.HeaderCell
+                            sorted={column === 'expiration_date' ? direction : null}
+                            onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'expiration_date'})}>
+                            Expiration Date
+                        </Table.HeaderCell>
+                        <Table.HeaderCell
+                            sorted={column === 'sku' ? direction : null}
+                            onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'sku'})}>
+                            SKU
+                        </Table.HeaderCell>
+                        <Table.HeaderCell
+                            sorted={column === 'category' ? direction : null}
+                            onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'category'})}>
+                            Category
+                        </Table.HeaderCell>
+                        <Table.HeaderCell
+                            sorted={column === 'price' ? direction : null}
+                            onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'price'})}>
+                            Price (USD)
+                        </Table.HeaderCell>
+                        <Table.HeaderCell
+                            sorted={column === 'shipment_batch' ? direction : null}
+                            onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'shipment_batch'})}>
+                            Shipment ID
+                        </Table.HeaderCell>
+                    </Table.Row>
+                </Table.Header>
+                <Table.Body>
+                    {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch}) => (
+                        <Table.Row key={_id}>
+                            <Table.HeaderCell>
                             <ProductInfoModal
                             _id={_id}
                             name={name}
@@ -98,18 +201,18 @@ function SearchFilter() {
                             shipment_batch={shipment_batch}
                             >
                             </ProductInfoModal>
-                        </Table.HeaderCell>
-                        <Table.Cell>{name}</Table.Cell>
-                        <Table.Cell>{expiration_date}</Table.Cell>
-                        <Table.Cell>{sku}</Table.Cell>
-                        <Table.Cell>{category}</Table.Cell>
-                        <Table.Cell>{price}</Table.Cell>
-                        <Table.Cell>{shipment_batch}</Table.Cell>
-                        
-                    </Table.Row>
-                ))}
-            </Table.Body>
-        </Table>
+                            </Table.HeaderCell>
+                            <Table.Cell>{name}</Table.Cell>
+                            <Table.Cell>{expiration_date}</Table.Cell>
+                            <Table.Cell>{sku}</Table.Cell>
+                            <Table.Cell>{category}</Table.Cell>
+                            <Table.Cell>{price}</Table.Cell>
+                            <Table.Cell>{shipment_batch}</Table.Cell>
+                        </Table.Row>
+                    ))}
+                </Table.Body>
+            </Table>
+            </div>
         </div>
     )
 

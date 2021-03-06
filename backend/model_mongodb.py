@@ -1,4 +1,7 @@
 import pymongo
+
+import time
+from datetime import date, datetime, timedelta
 import json
 from bson import json_util
 from bson.objectid import ObjectId
@@ -107,3 +110,100 @@ class Product(Model):
             {'$set': updates},    # the things to update
             new=True))  # return the updated object
         return product
+
+
+class Search(Model):
+
+    db_client = pymongo.MongoClient(credentials(), 27017)
+    collection = db_client["InventoryDB"]["InventoryColl"]
+
+    # def find(self, keyword):
+    #     products = list(self.collection.find({"name": keyword}))
+    #     print(keyword)
+    #     for product in products:
+    #         product["_id"] = str(product["_id"])
+    #     return products
+
+    def find_filter(self, keyword, filter_category,
+                    price_range, expiration, greaterThan):
+
+        # get all products in collection
+        products = list(self.collection.find())
+        filteredProducts = []
+        today = date.today()
+
+        for product in products:
+            # name filter
+            # filter based on name if keyword present
+            if ('' != keyword and keyword.lower() not in
+                    product['name'].lower()):
+                continue
+            # ---------------------------------------
+
+            # category filter
+            # filter based on category if filter is present
+            if ('' != filter_category and
+                    filter_category != product['category']):
+                continue
+
+            # ---------------------------------------
+
+            # price range filter
+            # filter based on price range if filter is present
+            if price_range != 0:
+
+                # for less than filters, if product price is above filter
+                # price, remove product
+                if greaterThan and price_range >= product['price']:
+                    continue
+                # for greater than filters, if product price is below filter
+                # price, remove product
+                elif not greaterThan:
+
+                    # using workaround
+                    if price_range <= product['price']:
+                        continue
+            # ---------------------------------------
+
+            # filter based on price range if filter is present
+            if '0' != expiration:
+
+                # skip over if no expiry date
+                if 'N/A' == product['expiration_date']:
+                    continue
+
+                dateToConvert = product['expiration_date']
+                month = int(dateToConvert[0:2])
+                day = int(dateToConvert[3:5])
+                year = int(dateToConvert[6:])
+
+                product_expiry = date(year, month, day)
+
+                deadline = int(expiration)
+
+                weeks = (((product_expiry - today).days) + 6) // 7
+                print(weeks, deadline, weeks > deadline)
+
+                if weeks > deadline:
+                    continue
+
+            filteredProducts.append(product)
+
+        # last steps
+        # Cast to list
+        # finalize formatting
+        for product in filteredProducts:
+            product["_id"] = str(product["_id"])
+        # --------------------------------------
+
+        return filteredProducts
+
+    def list_update(self, id, updates):
+        product = self.parse_json(self.collection.find_one_and_update(
+            {"_id": ObjectId(id)},  # the filter
+            {'$set': updates},    # the things to update
+            new=True))  # return the updated object
+        return product
+
+    # find_one_and_update returns original by default
+    # AFTER specifies to return the modified document

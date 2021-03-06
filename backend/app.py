@@ -78,8 +78,39 @@ def dashboard():
 @app.route('/search', methods=['GET', 'PATCH'])
 def search():
     if request.method == 'GET':
+
+        #  if there is json in the request run this
+        search_request = request.args
+
+        print(search_request)
+        print("\n\n")
+        if search_request:
+            productdb = Search()
+
+            #  set Params
+            keyword = search_request.get('keyword')
+            filter_category = search_request.get('filterCategory')
+            greaterThan = False
+
+            # remove comparison and cast to int
+            price_range = search_request.get('priceRange')
+            if price_range != 'none':
+                if price_range[0] == '>':
+                    greaterThan = True
+                price_range = int(price_range[1:])
+            else:
+                price_range = 0
+
+            expiry = search_request.get('expiry')
+            #  ------------------------------------
+
+            products = productdb.find_filter(keyword, filter_category,
+                                             price_range, expiry, greaterThan)
+            return jsonify(products=products)
+
         productdb = Product()
         products = productdb.list_all()
+
         return jsonify(products=products)
     if request.method == 'PATCH':
         id = request.args.get("_id")
