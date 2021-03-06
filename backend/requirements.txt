@@ -46,6 +46,7 @@ pytest-mongodb==2.2.0
 python-dateutil==2.8.1
 PyYAML==5.4.1
 pyzmq==21.0.1
+requests==2.25.1
 sentinels==1.0.0
 six==1.15.0
 toml==0.10.2
