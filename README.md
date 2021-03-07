@@ -6,6 +6,10 @@ This project offers a fairly simple login/register interface, and authentication
 ### Figma Prototype
 [Figma link](https://www.figma.com/file/QQCNWJnSh4qpgdr3v2G1LP/Untitled?node-id=0%3A1) Time estimate as described in [issue #2](https://github.com/Bob-Loth/csc-307/issues/2) (3 hours estimated, 4 hours actual)
 
+### Development Environment Setup
+
+This application is built using React, Flask, and MongoDB
+
 ### CI status
 | Branch | Status |
 |---|---|
