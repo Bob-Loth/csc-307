@@ -27,3 +27,26 @@ class TestSearch():
             assert 3 < len(product['shipment_batch']) < 10
         assert len(r.json()['products']) == 20
         assert r.status_code == 200
+
+    def test_update_one(self):
+        data_to_send = {'name': 'Dishwashing Machine'}
+        r = requests.patch(base_url + 'search', 
+                           data=json.dumps(data_to_send),
+                           params={'_id': \
+                                   "603dc23efb89b823bcc0ce98"},
+                           headers=header)
+        print(r.text)
+        assert r.text
+        assert r.status_code == 205
+
+        data_to_send2 = 'Dishwasher'
+        r2 = requests.patch(base_url + 'search', 
+                           data=json.dumps(data_to_send2),
+                           params={'_id': \
+                                   "603dc23efb89b823bcc0ce98"},
+                           headers=header)
+        
+        assert r2.json()['name'] == 'Dishwasher'
+        assert r2.status_code == 205
+        
+                           
