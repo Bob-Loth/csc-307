@@ -3,6 +3,9 @@
 
 This project offers a fairly simple login/register interface, and authentication-protected views of a database describing various products of a template store's inventory. Users can login, logout, view the list of products and their various properties, filter the list using multiple filter criteria, and edit properties of a particular product.
 
+### Figma Prototype
+https://www.figma.com/file/QQCNWJnSh4qpgdr3v2G1LP/Untitled?node-id=0%3A1
+
 ### CI status
 | Branch | Status |
 |---|---|
