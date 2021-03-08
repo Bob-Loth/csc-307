@@ -1,6 +1,7 @@
 import React, {useEffect} from 'react'
-import {Button} from 'semantic-ui-react'
+import { Grid} from 'semantic-ui-react'
 import axios from 'axios'
+import ListView from "../Components/ListView";
 
 function Dashboard() {
 
@@ -8,9 +9,6 @@ function Dashboard() {
 
     const token = localStorage.getItem('jwtToken')
 
-    function switchPage() {
-        window.location.replace("http://localhost:3000");
-    }
 
     useEffect(() => {
         axios.get(dash_url_string, {
@@ -25,7 +23,17 @@ function Dashboard() {
     return (
         <div className='form-container'>
             <h1>Dashboard </h1>
-            <Button onClick={() => switchPage()}>Back to Login</Button>
+            <Grid columns={2} padded>
+                <Grid.Column>
+                    <ListView listName='Expiry' secondHeaderField='Expiration Date'
+                              products={{pName: 'Apples', additionalField: '03/03/2021'}}/>
+                </Grid.Column>
+                <Grid.Column>
+                    <ListView listName='Low Stock' secondHeaderField='Stock Count'
+                              products={{pName: 'Apples', additionalField: '30'}}/>
+                </Grid.Column>
+            </Grid>
+
         </div>
     )
 
