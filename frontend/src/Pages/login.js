@@ -26,7 +26,6 @@ function Login() {
 
     function switchPage() {
         window.location.replace("http://localhost:3000/register");
-
     }
 
     function loginUserCallback() {
@@ -37,10 +36,10 @@ function Login() {
                 setSuccess(true)
                 login(resp.data['jwtToken'])
                 window.location.replace("http://localhost:3000/dashboard")
+                window.location.reload(false)
             })
             .catch(err => {
                 if (err.response) {
-                    console.log(err.response.data)
                     setSuccess(false)
                     setErrors(err.response.data.errors)
                 }

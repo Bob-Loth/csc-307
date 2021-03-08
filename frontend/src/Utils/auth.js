@@ -1,13 +1,12 @@
 import React, { useReducer, createContext } from 'react'
-import jwtDecode from "jwt-decode";
+import * as jwt_decode from 'jwt-decode';
 
 const initialState = {
     user: null
 }
 
 if(localStorage.getItem("jwtToken")) {
-    const decodedToken = jwtDecode(localStorage.getItem("jwtToken"))
-
+    const decodedToken =  jwt_decode.default(localStorage.getItem("jwtToken"))
     if(decodedToken.exp * 1000 < Date.now())
         localStorage.removeItem("jwtToken")
     else
@@ -16,8 +15,7 @@ if(localStorage.getItem("jwtToken")) {
 
 const AuthContext = createContext({
     user:null,
-    // eslint-disable-next-line no-unused-vars
-    login: (userData) => {},
+    login: () => {},
     logout: () => {}
 })
 

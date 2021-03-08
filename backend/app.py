@@ -30,7 +30,10 @@ def login():
         user = login.find_name_ret_hash(username)
 
         encoded = jwt.encode({
-            'jwtToken': user
+            'jwtToken': {
+                'username': username,
+                'pwd_hash': user
+            }
         }, 'csc307_key_jwt', algorithm='HS256')
 
         if db_hash is False:
