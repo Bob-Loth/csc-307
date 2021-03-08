@@ -185,10 +185,15 @@ function SearchFilter() {
                             onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'shipment_batch'})}>
                             Shipment ID
                         </Table.HeaderCell>
+                        <Table.HeaderCell
+                            sorted={column === 'stock' ? direction : null}
+                            onClick={() => dispatch({ type: 'CHANGE_SORT', column: 'stock'})}>
+                            Stock Count
+                        </Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
                 <Table.Body>
-                    {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch}) => (
+                    {productList.map(({_id, name, expiration_date, sku, category, price, shipment_batch, stock}) => (
                         <Table.Row key={_id}>
                             <Table.HeaderCell>
                             <ProductInfoModal
@@ -199,6 +204,7 @@ function SearchFilter() {
                             category={category}
                             price={price}
                             shipment_batch={shipment_batch}
+                            stock={stock}
                             >
                             </ProductInfoModal>
                             </Table.HeaderCell>
@@ -208,6 +214,7 @@ function SearchFilter() {
                             <Table.Cell>{category}</Table.Cell>
                             <Table.Cell>{price}</Table.Cell>
                             <Table.Cell>{shipment_batch}</Table.Cell>
+                            <Table.Cell>{stock}</Table.Cell>
                         </Table.Row>
                     ))}
                 </Table.Body>

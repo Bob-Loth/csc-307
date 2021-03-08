@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useForm} from '../Utils/hooks'
 import axios from 'axios'
 import { Button, Modal, Form } from 'semantic-ui-react'
-import { toNumber } from 'lodash';
+import { toInteger, toNumber } from 'lodash';
 
 function ProductInfoModal(props){
   const [open, setOpen] = useState(false);
@@ -15,7 +15,8 @@ function ProductInfoModal(props){
     category: props.category,
     expiration_date: props.expiration_date,
     price: props.price,
-    shipment_batch: props.shipment_batch
+    shipment_batch: props.shipment_batch,
+    stock: props.stock
   }
 
   const {onChange, values} = useForm(editProductCallback, initialState)
@@ -60,6 +61,18 @@ function ProductInfoModal(props){
                       "Optionally, 'N/A' should be used for items with no\n" + 
                       "expiration date.")
     }
+    //stock must be a positive integer with 1-8 digits
+    const regexStock = new RegExp('^[0-9]{1,8}$')
+    let stock = parseInt(values.stock, 10)
+    if (!regexStock.test(values.stock)){
+      errorString = errorString.concat("Stock Count must be a positive integer between 0-99999999")
+    }
+    else if (isNaN(stock)){
+      errorString = errorString.concat("Stock Count must be a positive integer between 0-99999999")
+    }
+    else if (stock < 0){
+      errorString = errorString.concat("Stock Count must be a positive integer between 0-99999999")
+    }
     return errorString;
   }
   //makes sure only the modified fields will be sent.
@@ -69,8 +82,9 @@ function ProductInfoModal(props){
     if (props.sku !== values.sku) ret.sku = values.sku;
     if (props.category !== values.category) ret.category = values.category;
     if (props.expiration_date !== values.expiration_date) ret.expiration_date = values.expiration_date;
-    if (props.price !== values.price) ret.price = toNumber(values.price);
+    if (props.price !== values.price) ret.price = Math.abs(toNumber(values.price));
     if (props.shipment_batch !== values.shipment_batch) ret.shipment_batch = values.shipment_batch;
+    if (props.stock !== values.stock) ret.stock =  Math.abs(toInteger(values.stock));
     
     return ret
   }
@@ -145,6 +159,13 @@ function ProductInfoModal(props){
                     placeholder='New Shipment ID (S#...)'
                     name='shipment_batch'
                     value={values.shipment_batch}
+                    onChange={onChange}
+                />
+                <Form.Input
+                    label='Stock Count'
+                    placeholder='New Stock Count'
+                    name='stock'
+                    value={values.stock}
                     onChange={onChange}
                 />
                 
