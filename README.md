@@ -8,7 +8,17 @@ This project offers a fairly simple login/register interface, and authentication
 
 ### Development Environment Setup
 
-This application is built using React, Flask, and MongoDB
+This application is built using React, Flask, and MongoDB. 
+
+Steps to run:
+1- Clone repository.
+2- The frontend folder contains React code. Navigate to it, and run "npm install" This should install dependencies contained in package.json. Be sure to install npm and node.js first from your package manager or their websites.
+3- The backend folder contains Flask code, as well as pymongo helper functions to access a template MongoDB database.
+Navigate to this directory, and run "pip install -r requirements.txt."
+4- Now, we should have covered installation. We can start up the Flask server by running "python -m flask run" in the backend folder.
+5- In a separate terminal, we can start up the React frontend view by running "npm start" in the frontend folder.
+6- The testing suite includes tests that require the Flask server to be running. Before running all tests in the test suite, start up the Flask server.
+7- To run the full testing suite, run "python -m pytest ." in the backend directory.
 
 ### CI status
 | Branch | Status |
