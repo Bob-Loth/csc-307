@@ -59,7 +59,7 @@ function ProductInfoModal(props){
       console.log(values.expiration_date)
     } catch (error) {
       values.expiration_date = props.expiration_date
-      errorString = errorString.concat("Date must be of the format yyyy-mm-dd.\n")
+      errorString = errorString.concat("Date must be a valid date of the format yyyy-mm-dd.\n")
     }
     //stock must be a positive integer with 1-8 digits
     const regexStock = new RegExp('^[0-9]{1,8}$')
