@@ -35,7 +35,6 @@ class TestRegister():
         conn = pymongo.MongoClient(credentials(), 27017)
         db = conn['InventoryDB']['users']
         del_op = db.delete_one({'username': 'gawe>bWE'})
-        conn.close()
         assert del_op.deleted_count == 0
 
     # should return 409, indicating that username or password was empty
@@ -51,7 +50,6 @@ class TestRegister():
         conn = pymongo.MongoClient(credentials(), 27017)
         db = conn['InventoryDB']['users']
         del_op = db.delete_one({'username': ''})
-        conn.close()
         assert del_op.deleted_count == 0
 
     # should return 201, indicating that user was successfully registered.
@@ -69,5 +67,4 @@ class TestRegister():
         conn = pymongo.MongoClient(credentials(), 27017)
         db = conn['InventoryDB']['users']
         del_op = db.delete_one({'username': 'test-bfghaWBJJefluigyh'})
-        conn.close()
         assert del_op.deleted_count == 1

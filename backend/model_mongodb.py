@@ -199,9 +199,10 @@ class Search(Model):
         return filteredProducts
 
     def list_update(self, id, updates):
+        print(updates)
         product = self.parse_json(self.collection.find_one_and_update(
             {"_id": ObjectId(id)},  # the filter
-            {'$set': updates},    # the things to update
+            {'$set': updates},  # the things to update
             new=True))  # return the updated object
         return product
 

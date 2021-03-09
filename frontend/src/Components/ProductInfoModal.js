@@ -48,13 +48,17 @@ function ProductInfoModal(props){
       errorString = errorString.concat("Shipment must be of the form S#N, " + 
                       "where N is a 1-8 digit number\n")
     }
-    //a date, of the format m-d-y. m and d can be either 1-2 digits.
+    //a date, of the format yyyy-mm-dd. m and d can be either 1-2 digits.
     //m must be 1-12. d must be 1-31.
     //y must be 4 digits, and between 1900 and 2199.
-    const regexDate = new RegExp('^((0[1-9])|(1[0-2]))-(0[1-9]|[12][0-9]|3[01])' + 
-    '-(19[0-9]{2}|2[0-1][0-9]{2})|(N/A)$') // <- this part is the -y, above are m-d
-    if (!regexDate.test(values.expiration_date)){
-      errorString = errorString.concat("Date must be of the format mm-dd-yyyy.\n" +
+    let date = ""
+    try {
+      date = new Date(values.expiration_date).toISOString()
+      values.expiration_date = date
+      console.log(values.expiration_date)
+    } catch (error) {
+      values.expiration_date = props.expiration_date
+      errorString = errorString.concat("Date must be of the format yyyy-mm-dd.\n" +
                       "Valid month: 01-12\n" + 
                       "Valid day: 01-31\n" +
                       "Valid year: 1900-2199\n" +

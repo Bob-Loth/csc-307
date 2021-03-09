@@ -19,8 +19,7 @@ class TestSearch():
         assert r.json()
         for product in r.json()['products']:
             assert product['name']
-            assert len(product['expiration_date']) == 3 or \
-                len(product['expiration_date']) == 10
+            assert len(product['expiration_date']) == 29
             assert len(product['sku']) == 12
             assert product['category']
             assert product['price'] >= 0
