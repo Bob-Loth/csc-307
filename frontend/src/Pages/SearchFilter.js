@@ -40,49 +40,49 @@ function SearchFilter() {
         const day = DMY[1]
         const strMonth = DMY[2]
         const year = DMY[3]
-        let intMonth = 0;
+        let intMonth = "00";
         
         switch (strMonth) {
             case "Jan":
-                intMonth = 1;
+                intMonth = "01";
                 break;
             case "Feb":
-                intMonth = 2;
+                intMonth = "02";
                 break;
             case "Mar":
-                intMonth = 3;
+                intMonth = "03";
                 break;
             case "Apr":
-                intMonth = 4;
+                intMonth = "04";
                 break;
             case "May":
-                intMonth = 5;
+                intMonth = "05";
                 break;
             case "Jun":
-                intMonth = 6;
+                intMonth = "06";
                 break;
             case "Jul":
-                intMonth = 7;
+                intMonth = "07";
                 break;
             case "Aug":
-                intMonth = 8;
+                intMonth = "08";
                 break;
             case "Sep":
-                intMonth = 9;
+                intMonth = "09";
                 break;
             case "Oct":
-                intMonth = 10;
+                intMonth = "10";
                 break;
             case "Nov":
-                intMonth = 11;
+                intMonth = "11";
                 break;
             case "Dec":
-                intMonth = 12;
+                intMonth = "12";
                 break;
             default:
                 break;
         }
-        return (year + '-' + String(intMonth) + '-' + day)
+        return (year + '-' + intMonth + '-' + day)
     }
 
     function reducer(state, action) {
@@ -259,7 +259,7 @@ function SearchFilter() {
                             </ProductInfoModal>
                             </Table.HeaderCell>
                             <Table.Cell>{name}</Table.Cell>
-                            <Table.Cell>{toYMD(expiration_date)}</Table.Cell>
+                            <Table.Cell>{String(expiration_date).substr(0,16)}</Table.Cell>
                             <Table.Cell>{sku}</Table.Cell>
                             <Table.Cell>{category}</Table.Cell>
                             <Table.Cell>{price}</Table.Cell>
