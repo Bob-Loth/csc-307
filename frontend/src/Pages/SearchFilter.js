@@ -34,6 +34,56 @@ function SearchFilter() {
             });
     }
 
+    function toYMD(rdate) {
+        let date = String(rdate)
+        const DMY = date.split(" ")
+        const day = DMY[1]
+        const strMonth = DMY[2]
+        const year = DMY[3]
+        let intMonth = 0;
+        
+        switch (strMonth) {
+            case "Jan":
+                intMonth = 1;
+                break;
+            case "Feb":
+                intMonth = 2;
+                break;
+            case "Mar":
+                intMonth = 3;
+                break;
+            case "Apr":
+                intMonth = 4;
+                break;
+            case "May":
+                intMonth = 5;
+                break;
+            case "Jun":
+                intMonth = 6;
+                break;
+            case "Jul":
+                intMonth = 7;
+                break;
+            case "Aug":
+                intMonth = 8;
+                break;
+            case "Sep":
+                intMonth = 9;
+                break;
+            case "Oct":
+                intMonth = 10;
+                break;
+            case "Nov":
+                intMonth = 11;
+                break;
+            case "Dec":
+                intMonth = 12;
+                break;
+            default:
+                break;
+        }
+        return (year + '-' + String(intMonth) + '-' + day)
+    }
 
     function reducer(state, action) {
         switch (action.type) {
@@ -199,7 +249,7 @@ function SearchFilter() {
                             <ProductInfoModal
                             _id={_id}
                             name={name}
-                            expiration_date={expiration_date}
+                            expiration_date={toYMD(expiration_date)}
                             sku={sku}
                             category={category}
                             price={price}
@@ -209,7 +259,7 @@ function SearchFilter() {
                             </ProductInfoModal>
                             </Table.HeaderCell>
                             <Table.Cell>{name}</Table.Cell>
-                            <Table.Cell>{expiration_date}</Table.Cell>
+                            <Table.Cell>{toYMD(expiration_date)}</Table.Cell>
                             <Table.Cell>{sku}</Table.Cell>
                             <Table.Cell>{category}</Table.Cell>
                             <Table.Cell>{price}</Table.Cell>
