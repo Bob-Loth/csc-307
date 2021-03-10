@@ -126,6 +126,7 @@ function SearchFilter() {
                             <option value="none">None</option>
                             <option value="<10">Below $10</option>
                             <option value="<20">Below $20</option>
+                            <option value="<30">Below $30</option>
                             <option value="<50">Below $50</option>
                             <option value=">50">Above $50</option>
                             <option value=">100">Above $100</option>

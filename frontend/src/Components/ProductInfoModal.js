@@ -54,16 +54,12 @@ function ProductInfoModal(props){
     let date = ""
     try {
       date = new Date(values.expiration_date).toISOString()
-      values.expiration_date = date
+      
+      values.expiration_date = date.split("T")[0]
       console.log(values.expiration_date)
     } catch (error) {
       values.expiration_date = props.expiration_date
-      errorString = errorString.concat("Date must be of the format yyyy-mm-dd.\n" +
-                      "Valid month: 01-12\n" + 
-                      "Valid day: 01-31\n" +
-                      "Valid year: 1900-2199\n" +
-                      "Optionally, 'N/A' should be used for items with no\n" + 
-                      "expiration date.")
+      errorString = errorString.concat("Date must be a valid date of the format yyyy-mm-dd.\n")
     }
     //stock must be a positive integer with 1-8 digits
     const regexStock = new RegExp('^[0-9]{1,8}$')
