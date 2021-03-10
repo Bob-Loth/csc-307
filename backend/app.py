@@ -4,6 +4,7 @@ from flask import jsonify
 from flask_cors import CORS
 from model_mongodb import *
 import jwt
+import datetime
 
 from hash import *
 from Verification import verify_password
@@ -30,7 +31,10 @@ def login():
         user = login.find_name_ret_hash(username)
 
         encoded = jwt.encode({
-            'jwtToken': user
+            'jwtToken': {
+                'username': username,
+                'pwd_hash': user
+            }
         }, 'csc307_key_jwt', algorithm='HS256')
 
         if db_hash is False:
@@ -58,15 +62,19 @@ def register():
         new_user = Register(request.get_json())
 
         if len(errors['username']) == 0 and len(errors['username']) == 0:
-            new_user.register_user(name, encrypt(pwd))
-            resp = jsonify(success=True, errors=errors)
-            return resp, 201
+            if(new_user.register_user(name, encrypt(pwd))):
+                resp = jsonify(success=True, errors=errors)
+                return resp, 201
+            else:
+                errors['username'].append('User already registered')
+                resp = jsonify(success=False, errors=errors)
+                return resp, 409
         else:
             resp = jsonify(success=False, errors=errors)
             return resp, 409
 
 
-@app.route('/dashboard', methods=['POST'])
+@app.route('/dashboard', methods=['GET'])
 def dashboard():
     return "dashboard"
 
@@ -111,7 +119,20 @@ def search():
     if request.method == 'PATCH':
         id = request.args.get("_id")
         productdb = Product()
-        product = productdb.list_update(id, request.get_json())
+
+        updates = request.get_json()
+
+        r_date = str(request.get_json().get('expiration_date'))
+        # if it exists in update object, format the date for suitable storage
+        # in mongoDB.
+        print("r_Date", r_date)
+        if (request.get_json().get('expiration_date')):
+            temp_date = datetime.date(int(r_date[0:4]),
+                                      int(r_date[5:7]),
+                                      int(r_date[8:10]))
+            updates['expiration_date'] = \
+                datetime.datetime.combine(temp_date, datetime.time.min)
+        product = productdb.list_update(id, updates)
         if product:
             return product, 205
         else:

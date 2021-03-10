@@ -2,7 +2,7 @@ import React, {useState} from 'react'
 import {useForm} from '../Utils/hooks'
 import axios from 'axios'
 import { Button, Modal, Form } from 'semantic-ui-react'
-import { toNumber } from 'lodash';
+import { toInteger, toNumber } from 'lodash';
 
 function ProductInfoModal(props){
   const [open, setOpen] = useState(false);
@@ -15,7 +15,8 @@ function ProductInfoModal(props){
     category: props.category,
     expiration_date: props.expiration_date,
     price: props.price,
-    shipment_batch: props.shipment_batch
+    shipment_batch: props.shipment_batch,
+    stock: props.stock
   }
 
   const {onChange, values} = useForm(editProductCallback, initialState)
@@ -47,18 +48,30 @@ function ProductInfoModal(props){
       errorString = errorString.concat("Shipment must be of the form S#N, " + 
                       "where N is a 1-8 digit number\n")
     }
-    //a date, of the format m-d-y. m and d can be either 1-2 digits.
+    //a date, of the format yyyy-mm-dd. m and d can be either 1-2 digits.
     //m must be 1-12. d must be 1-31.
     //y must be 4 digits, and between 1900 and 2199.
-    const regexDate = new RegExp('^((0[1-9])|(1[0-2]))-(0[1-9]|[12][0-9]|3[01])' + 
-    '-(19[0-9]{2}|2[0-1][0-9]{2})|(N/A)$') // <- this part is the -y, above are m-d
-    if (!regexDate.test(values.expiration_date)){
-      errorString = errorString.concat("Date must be of the format mm-dd-yyyy.\n" +
-                      "Valid month: 01-12\n" + 
-                      "Valid day: 01-31\n" +
-                      "Valid year: 1900-2199\n" +
-                      "Optionally, 'N/A' should be used for items with no\n" + 
-                      "expiration date.")
+    let date = ""
+    try {
+      date = new Date(values.expiration_date).toISOString()
+      
+      values.expiration_date = date.split("T")[0]
+      console.log(values.expiration_date)
+    } catch (error) {
+      values.expiration_date = props.expiration_date
+      errorString = errorString.concat("Date must be a valid date of the format yyyy-mm-dd.\n")
+    }
+    //stock must be a positive integer with 1-8 digits
+    const regexStock = new RegExp('^[0-9]{1,8}$')
+    let stock = parseInt(values.stock, 10)
+    if (!regexStock.test(values.stock)){
+      errorString = errorString.concat("Stock Count must be a positive integer between 0-99999999")
+    }
+    else if (isNaN(stock)){
+      errorString = errorString.concat("Stock Count must be a positive integer between 0-99999999")
+    }
+    else if (stock < 0){
+      errorString = errorString.concat("Stock Count must be a positive integer between 0-99999999")
     }
     return errorString;
   }
@@ -69,8 +82,9 @@ function ProductInfoModal(props){
     if (props.sku !== values.sku) ret.sku = values.sku;
     if (props.category !== values.category) ret.category = values.category;
     if (props.expiration_date !== values.expiration_date) ret.expiration_date = values.expiration_date;
-    if (props.price !== values.price) ret.price = toNumber(values.price);
+    if (props.price !== values.price) ret.price = Math.abs(toNumber(values.price));
     if (props.shipment_batch !== values.shipment_batch) ret.shipment_batch = values.shipment_batch;
+    if (props.stock !== values.stock) ret.stock =  Math.abs(toInteger(values.stock));
     
     return ret
   }
@@ -145,6 +159,13 @@ function ProductInfoModal(props){
                     placeholder='New Shipment ID (S#...)'
                     name='shipment_batch'
                     value={values.shipment_batch}
+                    onChange={onChange}
+                />
+                <Form.Input
+                    label='Stock Count'
+                    placeholder='New Stock Count'
+                    name='stock'
+                    value={values.stock}
                     onChange={onChange}
                 />
                 

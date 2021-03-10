@@ -14,7 +14,6 @@ function MenuBar() {
 
     const handleItemClick = (e, {name}) => setActiveItem(name)
     const {user, logout} = useContext(AuthContext)
-
     useEffect(() => {
         setActiveItem(path)
     }, [path])
