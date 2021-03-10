@@ -58,7 +58,6 @@ function ProductInfoModal(props){
       values.expiration_date = date.split("T")[0]
 
     } catch (error) {
-      values.expiration_date = props.expiration_date
       errorString = errorString.concat("Date must be a valid date of the format yyyy-mm-dd.\n")
     }
     //stock must be a positive integer with 1-8 digits
