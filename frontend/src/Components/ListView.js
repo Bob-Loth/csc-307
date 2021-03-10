@@ -5,8 +5,6 @@ import { toArray } from 'lodash'
 
 function ListView({listName, secondHeaderField, products}) {
 
-
-
     return (
         <div>
             <h1>{listName}</h1>
