@@ -5,8 +5,8 @@ import ListView from "../Components/ListView";
 
 function Dashboard() {
 
-    const expiry_url_string = "http://localhost:5000/dashboard/expiry/";
-    const lowstock_url_string = "http://localhost:5000/dashboard/lowstock/";
+    const expiry_url_string = "http://localhost:5000/dashboard/expiry";
+    const lowstock_url_string = "http://localhost:5000/dashboard/lowstock";
 
     const [expired_products, set_expired_products] = useState([])
     const [lowstock_products, set_lowstock_products] = useState([])

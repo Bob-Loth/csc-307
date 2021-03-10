@@ -78,17 +78,20 @@ def register():
 def dashboard():
     return "dashboard"
 
+
 @app.route('/dashboard/expiry', methods=['GET'])
 def dashboard_expiry():
     if request.method == 'GET':
         products = Search()
         return products.get_sorted_limit("expiration_date", 5)
 
+
 @app.route('/dashboard/lowstock', methods=['GET'])
 def dashboard_lowstock():
     if request.method == 'GET':
         products = Search()
         return products.get_sorted_limit("stock", 5)
+
 
 @app.route('/search', methods=['GET', 'PATCH'])
 def search():
@@ -130,7 +133,7 @@ def search():
             #  ------------------------------------
 
             products = productdb.find_filter(keyword, filter_category,
-                                             price_range, expiry, greaterThan, 
+                                             price_range, expiry, greaterThan,
                                              stockAbove, stock_range)
             return jsonify(products=products)
 
@@ -148,7 +151,7 @@ def search():
         r_date = str(request.get_json().get('expiration_date'))
         # if it exists in update object, format the date for suitable storage
         # in mongoDB.
-        
+
         if (request.get_json().get('expiration_date')):
             temp_date = datetime.date(int(r_date[0:4]),
                                       int(r_date[5:7]),

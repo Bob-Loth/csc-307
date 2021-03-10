@@ -14,8 +14,8 @@ except ModuleNotFoundError:
 from flask import jsonify
 from pymongo.collation import Collation, CollationStrength
 
-class Model(dict):
 
+class Model(dict):
     def parse_json(self, data):
         return json.loads(json_util.dumps(data))
 
@@ -90,19 +90,20 @@ class Search(Model):
             product["_id"] = str(product["_id"])
             product["expiration_date"] = to_ymd(product["expiration_date"])
         return jsonify(products)
+
     def find_filter(self, keyword, filter_category,
-                    price_range, expiration, greaterThan, 
+                    price_range, expiration, greaterThan,
                     stockAbove, stock_range):
 
         # get all products in collection
         query = {}
-        
+
         # name filter
         # filter based on name if keyword present
         if ('' != keyword):
 
             query['name'] = {'$regex': keyword, "$options": 'i'}
-            
+
         # ---------------------------------------
 
         # category filter
@@ -135,7 +136,7 @@ class Search(Model):
             # stock, remove product
             if stockAbove:
                 query['stock'] = {'$gte': stock_range}
-                
+
             # for greater than filters, if product stock is below filter
             # stock, remove product
             elif not greaterThan:
@@ -147,7 +148,7 @@ class Search(Model):
         if '0' != expiration:
 
             # voodoo magic
-            deadline = (datetime.now() + 
+            deadline = (datetime.now() +
                         timedelta(weeks=int(expiration))
                         )
 
@@ -155,9 +156,8 @@ class Search(Model):
 
         products = (
             list(self.collection.find(query).
-                collation(Collation(locale='en', 
-                    strength=CollationStrength.SECONDARY))
-            )
+                 collation(Collation(locale='en',
+                           strength=CollationStrength.SECONDARY)))
         )
 
         # last steps
