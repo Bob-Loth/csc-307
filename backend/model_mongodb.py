@@ -1,5 +1,5 @@
 import pymongo
-
+from format_date import to_ymd
 import time
 from datetime import date, datetime, timedelta
 import json
@@ -15,38 +15,9 @@ from flask import jsonify
 
 
 class Model(dict):
-    """
-    A simple model that wraps mongodb document
-    """
-    __getattr__ = dict.get
-    __delattr__ = dict.__delitem__
-    __setattr__ = dict.__setitem__
 
     def parse_json(self, data):
         return json.loads(json_util.dumps(data))
-
-    def save(self):
-        if not self._id:
-            self.collection.insert(self)
-        else:
-            self.collection.update(
-                {"_id": ObjectId(self._id)}, self)
-        self._id = str(self._id)
-
-    def reload(self):
-        if self._id:
-            result = self.collection.find_one({"_id": ObjectId(self._id)})
-            if result:
-                self.update(result)
-                self._id = str(self._id)
-                return True
-        return False
-
-    def remove(self):
-        if self._id:
-            resp = self.collection.remove({"_id": ObjectId(self._id)})
-            self.clear()
-            return resp
 
 
 class Login(Model):
@@ -94,12 +65,7 @@ class Product(Model):
         products = list(self.collection.find())
         for product in products:
             product["_id"] = str(product["_id"])
-        return products
-
-    # returns a list of products in filter_category that match filter_item
-    def list_filter(self, filter_category, filter_item):
-        filter_category = str(filter_category)
-        products = list(self.collection.find({filter_category: filter_item}))
+            product["expiration_date"] = to_ymd(product["expiration_date"])
         return products
 
     # find_one_and_update returns original by default
@@ -116,13 +82,6 @@ class Search(Model):
 
     db_client = pymongo.MongoClient(credentials(), 27017)
     collection = db_client["InventoryDB"]["InventoryColl"]
-
-    # def find(self, keyword):
-    #     products = list(self.collection.find({"name": keyword}))
-    #     print(keyword)
-    #     for product in products:
-    #         product["_id"] = str(product["_id"])
-    #     return products
 
     def find_filter(self, keyword, filter_category,
                     price_range, expiration, greaterThan):
@@ -197,14 +156,5 @@ class Search(Model):
         # --------------------------------------
 
         return filteredProducts
-
-    def list_update(self, id, updates):
-        print(updates)
-        product = self.parse_json(self.collection.find_one_and_update(
-            {"_id": ObjectId(id)},  # the filter
-            {'$set': updates},  # the things to update
-            new=True))  # return the updated object
-        return product
-
     # find_one_and_update returns original by default
     # AFTER specifies to return the modified document
