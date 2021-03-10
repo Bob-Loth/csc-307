@@ -34,10 +34,8 @@ class Login(Model):
         if len(users) == 1:
             return users[0]["password"]
         elif len(users) > 1:
-            # app.logger.errors("Multiple users with same information")
             return False
         else:
-            # app.logger.errors("User does not exist")
             return False
 
 
@@ -48,7 +46,6 @@ class Register(Model):
     def register_user(self, user, hash):
         dup_users = list(self.collection.find({"username": str(user)}))
         if len(dup_users) != 0:
-            # app.logger.errors("User " + str(user) + " already registered")
             return False
         else:
             # db_ret is the _id field of the registered user

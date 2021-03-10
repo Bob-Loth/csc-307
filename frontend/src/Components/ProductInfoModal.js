@@ -54,9 +54,9 @@ function ProductInfoModal(props){
     let date = ""
     try {
       date = new Date(values.expiration_date).toISOString()
-      
+
       values.expiration_date = date.split("T")[0]
-      console.log(values.expiration_date)
+
     } catch (error) {
       values.expiration_date = props.expiration_date
       errorString = errorString.concat("Date must be a valid date of the format yyyy-mm-dd.\n")
@@ -94,8 +94,7 @@ function ProductInfoModal(props){
     /*if there was any data edited*/
     if (Object.keys(patchObj).length !== 0){
       axios.patch(search_url_string + "?_id=" + values._id.toString(), patchObj)
-        .then( (resp) => {
-            console.log(resp.data)
+        .then( () => {
             window.location.reload()
         })
         .catch(err => {
@@ -195,9 +194,6 @@ function ProductInfoModal(props){
                   setErrors(errors)
                   if (errors === ""){
                     editProductCallback(patchObj)
-                  }
-                  else{
-                    console.log(errors)
                   }
                 }}>
                   Submit Changes

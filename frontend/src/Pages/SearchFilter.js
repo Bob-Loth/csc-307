@@ -93,7 +93,6 @@ function SearchFilter() {
                             
                             const expiry = e.target.value;
                             setExp(expiry);
-                            console.log(expiry)
                         }}>
                             <option value='0'>None</option>
                             <option value='1'>Within One Week</option>
@@ -106,7 +105,6 @@ function SearchFilter() {
                             
                             const cat = e.target.value;
                             setCategory(cat);
-                            console.log(cat)
                         }}>
                             <option value=''>None</option>
                             <option value='Cooking'>Cooking</option>
@@ -123,7 +121,6 @@ function SearchFilter() {
                             
                             const pr = e.target.value;
                             setPriceRange(pr);
-                            console.log(pr)
                         }}>
                             <option value="none">None</option>
                             <option value="<10">Below $10</option>
@@ -140,7 +137,6 @@ function SearchFilter() {
                             
                             const sr = e.target.value;
                             setStockRange(sr);
-                            console.log(sr)
                         }}>
                             <option value="none">none</option>
                             <option value="<10">Below 10</option>
