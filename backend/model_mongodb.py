@@ -12,6 +12,7 @@ except ModuleNotFoundError:
         return 'localhost'
 
 from flask import jsonify
+from pymongo.collation import Collation, CollationStrength
 
 
 class Model(dict):
@@ -124,47 +125,53 @@ class Search(Model):
     #         product["_id"] = str(product["_id"])
     #     return products
 
-    def find_filter(self, keyword, filter_category, 
+    def find_filter(self, keyword, filter_category,
             price_range, expiration, greaterThan):
 
         # get all products in collection
-        products = list(self.collection.find())
+        query = {}
+        
         filteredProducts = []
         today = date.today()
 
+        
+        # name filter
+        # filter based on name if keyword present
+        if ('' != keyword):
+            query['name'] = {'$regex': keyword}
+            
+        # ---------------------------------------
+
+        # category filter
+        # filter based on category if filter is present
+        if ('' != filter_category):
+            query['category'] = filter_category
+            
+
+        # ---------------------------------------
+
+        # price range filter
+        # filter based on price range if filter is present
+        if price_range != 0:
+
+            # for less than filters, if product price is above filter
+            # price, remove product
+            if greaterThan:
+                query['price'] = {'$gte': price_range}
+                
+            # for greater than filters, if product price is below filter
+            # price, remove product
+            elif not greaterThan:
+                # using workaround
+                query['price'] = {'$lte': price_range}
+        # ---------------------------------------
+        products = (
+            list(self.collection.find(query).
+                collation(Collation(locale='en', 
+                    strength=CollationStrength.SECONDARY))
+            )
+        )
         for product in products:
-            # name filter
-            # filter based on name if keyword present
-            if ('' != keyword and keyword.lower() not in 
-                    product['name'].lower()):
-                continue
-            # ---------------------------------------
-
-            # category filter
-            # filter based on category if filter is present
-            if ('' != filter_category and
-                    filter_category != product['category']):
-                continue
-
-            # ---------------------------------------
-
-            # price range filter
-            # filter based on price range if filter is present
-            if price_range != 0:
-
-                # for less than filters, if product price is above filter
-                # price, remove product
-                if greaterThan and price_range >= product['price']:
-                    continue
-                # for greater than filters, if product price is below filter
-                # price, remove product
-                elif not greaterThan:
-
-                    # using workaround
-                    if price_range <= product['price']:
-                        continue
-            # ---------------------------------------
-
             # filter based on price range if filter is present
             if '0' != expiration:
 
@@ -188,6 +195,7 @@ class Search(Model):
                     continue
 
             filteredProducts.append(product)
+        
 
         # last steps
         # Cast to list
