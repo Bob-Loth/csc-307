@@ -14,14 +14,14 @@ function Dashboard() {
     useEffect(() => {
         axios.get(expiry_url_string)
             .then(res => {
-                set_expired_products(res)
+                set_expired_products(res.data)
         })
     }, []);
 
     useEffect(() => {
         axios.get(lowstock_url_string)
             .then(res => {
-                set_lowstock_products(res)
+                set_lowstock_products(res.data)
             })
     }, []);
 
