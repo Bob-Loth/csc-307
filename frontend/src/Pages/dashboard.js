@@ -1,24 +1,29 @@
-import React, {useEffect} from 'react'
+import React, {useEffect, useState} from 'react'
 import { Grid} from 'semantic-ui-react'
 import axios from 'axios'
 import ListView from "../Components/ListView";
 
 function Dashboard() {
 
-    const dash_url_string = "http://localhost:5000/dashboard";
+    const expiry_url_string = "http://localhost:5000/dashboard/expiry/";
+    const lowstock_url_string = "http://localhost:5000/dashboard/lowstock/";
 
-    const token = localStorage.getItem('jwtToken')
-
+    const [expired_products, set_expired_products] = useState([])
+    const [lowstock_products, set_lowstock_products] = useState([])
 
     useEffect(() => {
-        axios.get(dash_url_string, {
-            headers: {
-                'Authorization': `Bearer ${token}`
-            }
-        }).then(res => {
-            console.log(res)
+        axios.get(expiry_url_string)
+            .then(res => {
+                set_expired_products(res)
         })
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        axios.get(lowstock_url_string)
+            .then(res => {
+                set_lowstock_products(res)
+            })
+    }, []);
 
     return (
         <div className='form-container'>
@@ -26,11 +31,11 @@ function Dashboard() {
             <Grid columns={2} padded>
                 <Grid.Column>
                     <ListView listName='Expiry' secondHeaderField='Expiration Date'
-                              products={{pName: 'Apples', additionalField: '03/03/2021'}}/>
+                              products={expired_products}/>
                 </Grid.Column>
                 <Grid.Column>
                     <ListView listName='Low Stock' secondHeaderField='Stock Count'
-                              products={{pName: 'Apples', additionalField: '30'}}/>
+                              products={lowstock_products}/>
                 </Grid.Column>
             </Grid>
 

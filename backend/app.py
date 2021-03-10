@@ -78,6 +78,17 @@ def register():
 def dashboard():
     return "dashboard"
 
+@app.route('/dashboard/expiry', methods=['GET'])
+def dashboard_expiry():
+    if request.method == 'GET':
+        products = Search()
+        return products.get_sorted_limit("expiration_date", 5)
+
+@app.route('/dashboard/lowstock', methods=['GET'])
+def dashboard_lowstock():
+    if request.method == 'GET':
+        products = Search()
+        return products.get_sorted_limit("stock", 5)
 
 @app.route('/search', methods=['GET', 'PATCH'])
 def search():
