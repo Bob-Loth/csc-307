@@ -17,6 +17,7 @@ matrix:
         - pip install -r requirements.txt
       script:
         - python -m pycodestyle . --exclude=venv
+        - python -m flask run & # run in background
         - python -m pytest -v --cov=. --cov-config=.coveragerc
     
     - language: node_js

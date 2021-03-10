@@ -4,3 +4,5 @@ omit =
     test_hash.py
     test_model_mongodb.py
     test_username_pwd_verification.py
+    test_register.py
+    test_login.py

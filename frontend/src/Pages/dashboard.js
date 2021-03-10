@@ -1,35 +1,44 @@
-import React from 'react'
-import {Button} from 'semantic-ui-react'
-import {useForm} from "../Utils/hooks";
+import React, {useEffect, useState} from 'react'
+import { Grid} from 'semantic-ui-react'
 import axios from 'axios'
+import ListView from "../Components/ListView";
 
 function Dashboard() {
 
-    const login_url_string = "http://localhost:5000/home";
-    //const [errors, setErrors] = useState({})
+    const expiry_url_string = "http://localhost:5000/dashboard/expiry";
+    const lowstock_url_string = "http://localhost:5000/dashboard/lowstock";
 
-    const initialState = {
-        username: '',
-        password: '',
-    }
-    
-    const {values} = useForm(loginUserCallback, initialState)
+    const [expired_products, set_expired_products] = useState([])
+    const [lowstock_products, set_lowstock_products] = useState([])
 
-    function switchPage() {
-        window.location.replace("http://localhost:3000");
-    }
+    useEffect(() => {
+        axios.get(expiry_url_string)
+            .then(res => {
+                set_expired_products(res.data)
+        })
+    }, []);
 
-    function loginUserCallback() {
-        //once login button is clicked, send the fields to the backend and do
-        //something with the response
-        axios.post(login_url_string, {'name': values.username, 'pwd': values.password})
-            .then((resp) => console.log(resp));
-    }
+    useEffect(() => {
+        axios.get(lowstock_url_string)
+            .then(res => {
+                set_lowstock_products(res.data)
+            })
+    }, []);
 
     return (
         <div className='form-container'>
             <h1>Dashboard </h1>
-            <Button onClick={() => switchPage()}>Back to Login</Button>
+            <Grid columns={2} padded>
+                <Grid.Column>
+                    <ListView listName='Expiry' secondHeaderField='Expiration Date'
+                              products={expired_products}/>
+                </Grid.Column>
+                <Grid.Column>
+                    <ListView listName='Low Stock' secondHeaderField='Stock Count'
+                              products={lowstock_products}/>
+                </Grid.Column>
+            </Grid>
+
         </div>
     )
 

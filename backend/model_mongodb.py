@@ -1,5 +1,5 @@
 import pymongo
-
+from format_date import to_ymd
 import time
 from datetime import date, datetime, timedelta
 import json
@@ -12,41 +12,12 @@ except ModuleNotFoundError:
         return 'localhost'
 
 from flask import jsonify
+from pymongo.collation import Collation, CollationStrength
 
 
 class Model(dict):
-    """
-    A simple model that wraps mongodb document
-    """
-    __getattr__ = dict.get
-    __delattr__ = dict.__delitem__
-    __setattr__ = dict.__setitem__
-
     def parse_json(self, data):
         return json.loads(json_util.dumps(data))
-
-    def save(self):
-        if not self._id:
-            self.collection.insert(self)
-        else:
-            self.collection.update(
-                {"_id": ObjectId(self._id)}, self)
-        self._id = str(self._id)
-
-    def reload(self):
-        if self._id:
-            result = self.collection.find_one({"_id": ObjectId(self._id)})
-            if result:
-                self.update(result)
-                self._id = str(self._id)
-                return True
-        return False
-
-    def remove(self):
-        if self._id:
-            resp = self.collection.remove({"_id": ObjectId(self._id)})
-            self.clear()
-            return resp
 
 
 class Login(Model):
@@ -63,10 +34,8 @@ class Login(Model):
         if len(users) == 1:
             return users[0]["password"]
         elif len(users) > 1:
-            # app.logger.errors("Multiple users with same information")
             return False
         else:
-            # app.logger.errors("User does not exist")
             return False
 
 
@@ -77,7 +46,6 @@ class Register(Model):
     def register_user(self, user, hash):
         dup_users = list(self.collection.find({"username": str(user)}))
         if len(dup_users) != 0:
-            # app.logger.errors("User " + str(user) + " already registered")
             return False
         else:
             # db_ret is the _id field of the registered user
@@ -94,12 +62,7 @@ class Product(Model):
         products = list(self.collection.find())
         for product in products:
             product["_id"] = str(product["_id"])
-        return products
-
-    # returns a list of products in filter_category that match filter_item
-    def list_filter(self, filter_category, filter_item):
-        filter_category = str(filter_category)
-        products = list(self.collection.find({filter_category: filter_item}))
+            product["expiration_date"] = to_ymd(product["expiration_date"])
         return products
 
     # find_one_and_update returns original by default
@@ -117,93 +80,100 @@ class Search(Model):
     db_client = pymongo.MongoClient(credentials(), 27017)
     collection = db_client["InventoryDB"]["InventoryColl"]
 
-    # def find(self, keyword):
-    #     products = list(self.collection.find({"name": keyword}))
-    #     print(keyword)
-    #     for product in products:
-    #         product["_id"] = str(product["_id"])
-    #     return products
+    def get_sorted_limit(self, filter, num_docs):
+        products = list(self.collection.find()
+                        .sort(filter, pymongo.ASCENDING).limit(num_docs))
+        for product in products:
+            product["_id"] = str(product["_id"])
+            product["expiration_date"] = to_ymd(product["expiration_date"])
+        return jsonify(products)
 
+    # @Params:
+    # keyword: str | searches items with keyword as substring of item name
+    # filter_category: str | searches for items in category
+    # price_range: int | sets price comparison argument of price filter
+    # expiration: str | converted to int between 0-2 as number of weeks
+    #     until expiry
+    # greaterThan: bool | sets comparison for price_range to search gte
+    # stockAbove: bool | sets comparison for stock_range to search gte
+    # stock_range: int | sets stock comparison argument of stock filter
     def find_filter(self, keyword, filter_category,
-                    price_range, expiration, greaterThan):
+                    price_range, expiration, greaterThan,
+                    stockAbove, stock_range):
 
         # get all products in collection
-        products = list(self.collection.find())
-        filteredProducts = []
-        today = date.today()
+        query = {}
 
-        for product in products:
-            # name filter
-            # filter based on name if keyword present
-            if ('' != keyword and keyword.lower() not in
-                    product['name'].lower()):
-                continue
-            # ---------------------------------------
+        # name filter
+        # filter based on name if keyword present
+        if ('' != keyword):
 
-            # category filter
-            # filter based on category if filter is present
-            if ('' != filter_category and
-                    filter_category != product['category']):
-                continue
+            query['name'] = {'$regex': keyword, "$options": 'i'}
 
-            # ---------------------------------------
+        # ---------------------------------------
 
-            # price range filter
-            # filter based on price range if filter is present
-            if price_range != 0:
+        # category filter
+        # filter based on category if filter is present
+        if ('' != filter_category):
+            query['category'] = filter_category
+        # ---------------------------------------
 
-                # for less than filters, if product price is above filter
-                # price, remove product
-                if greaterThan and price_range >= product['price']:
-                    continue
-                # for greater than filters, if product price is below filter
-                # price, remove product
-                elif not greaterThan:
+        # price range filter
+        # filter based on price range if filter is present
+        if price_range != 0:
 
-                    # using workaround
-                    if price_range <= product['price']:
-                        continue
-            # ---------------------------------------
+            # for less than filters, if product price is above filter
+            # price, remove product
+            if greaterThan:
+                query['price'] = {'$gte': price_range}
 
-            # filter based on price range if filter is present
-            if '0' != expiration:
+            # for greater than filters, if product price is below filter
+            # price, remove product
+            elif not greaterThan:
+                # using workaround
+                query['price'] = {'$lte': price_range}
+        # ---------------------------------------
 
-                # skip over if no expiry date
-                if 'N/A' == product['expiration_date']:
-                    continue
+        # stock range filter
+        # filter based on stock range if filter is present
+        if stock_range != 0:
 
-                dateToConvert = product['expiration_date']
-                month = int(dateToConvert[0:2])
-                day = int(dateToConvert[3:5])
-                year = int(dateToConvert[6:])
+            # for less than filters, if product stock is above filter
+            # stock, remove product
+            if stockAbove:
+                query['stock'] = {'$gte': stock_range}
 
-                product_expiry = date(year, month, day)
+            # for greater than filters, if product stock is below filter
+            # stock, remove product
+            elif not stockAbove:
+                # using workaround
+                query['stock'] = {'$lte': stock_range}
+        # ---------------------------------------
 
-                deadline = int(expiration)
+        # date time query filter
+        if '0' != expiration:
 
-                weeks = (((product_expiry - today).days) + 6) // 7
-                print(weeks, deadline, weeks > deadline)
+            # voodoo magic
+            deadline = (datetime.now() +
+                        timedelta(weeks=int(expiration))
+                        )
 
-                if weeks > deadline:
-                    continue
+            query['expiration_date'] = {'$lte': deadline}
 
-            filteredProducts.append(product)
+        products = (
+            list(self.collection.find(query).
+                 collation(Collation(locale='en',
+                           strength=CollationStrength.SECONDARY)))
+        )
 
         # last steps
         # Cast to list
         # finalize formatting
-        for product in filteredProducts:
+        for product in products:
             product["_id"] = str(product["_id"])
+            product["expiration_date"] = to_ymd(product["expiration_date"])
         # --------------------------------------
 
-        return filteredProducts
-
-    def list_update(self, id, updates):
-        product = self.parse_json(self.collection.find_one_and_update(
-            {"_id": ObjectId(id)},  # the filter
-            {'$set': updates},    # the things to update
-            new=True))  # return the updated object
-        return product
-
+        return products
     # find_one_and_update returns original by default
     # AFTER specifies to return the modified document
