@@ -14,7 +14,6 @@ except ModuleNotFoundError:
 from flask import jsonify
 from pymongo.collation import Collation, CollationStrength
 
-
 class Model(dict):
 
     def parse_json(self, data):
@@ -84,22 +83,18 @@ class Search(Model):
     db_client = pymongo.MongoClient(credentials(), 27017)
     collection = db_client["InventoryDB"]["InventoryColl"]
 
-
-
     def find_filter(self, keyword, filter_category,
-                    price_range, expiration, greaterThan):
+                    price_range, expiration, greaterThan, 
+                    stockAbove, stock_range):
 
         # get all products in collection
         query = {}
-        
-        filteredProducts = []
-        today = date.today()
-
-        
+                
         # name filter
         # filter based on name if keyword present
         if ('' != keyword):
-            query['name'] = {'$regex': keyword}
+
+            query['name'] = {'$regex': keyword, "$options": 'i'}
             
         # ---------------------------------------
 
@@ -108,7 +103,6 @@ class Search(Model):
         if ('' != filter_category):
             query['category'] = filter_category
             
-
         # ---------------------------------------
 
         # price range filter
@@ -126,46 +120,48 @@ class Search(Model):
                 # using workaround
                 query['price'] = {'$lte': price_range}
         # ---------------------------------------
+
+        # stock range filter
+        # filter based on stock range if filter is present
+        if stock_range != 0:
+
+            # for less than filters, if product stock is above filter
+            # stock, remove product
+            if stockAbove:
+                query['stock'] = {'$gte': stock_range}
+                
+            # for greater than filters, if product stock is below filter
+            # stock, remove product
+            elif not greaterThan:
+                # using workaround
+                query['stock'] = {'$lte': stock_range}
+        # ---------------------------------------
+
+        # date time query filter
+        if '0' != expiration:
+
+            # voodoo magic
+            deadline = (datetime.now() + 
+                        timedelta(weeks=int(expiration))
+                        )
+
+            query['expiration_date'] = {'$lte': deadline}
+
         products = (
             list(self.collection.find(query).
                 collation(Collation(locale='en', 
                     strength=CollationStrength.SECONDARY))
             )
         )
-        
-        for product in products:
-            # filter based on price range if filter is present
-            if '0' != expiration:
-
-                # skip over if no expiry date
-                if 'N/A' == product['expiration_date']:
-                    continue
-
-                dateToConvert = product['expiration_date']
-                month = int(dateToConvert[0:2])
-                day = int(dateToConvert[3:5])
-                year = int(dateToConvert[6:])
-
-                product_expiry = date(year, month, day)
-
-                deadline = int(expiration)
-
-                weeks = (((product_expiry - today).days) + 6) // 7
-                print(weeks, deadline, weeks > deadline)
-
-                if weeks > deadline:
-                    continue
-
-            filteredProducts.append(product)
-        
 
         # last steps
         # Cast to list
         # finalize formatting
-        for product in filteredProducts:
+        for product in products:
             product["_id"] = str(product["_id"])
+            product["expiration_date"] = to_ymd(product["expiration_date"])
         # --------------------------------------
 
-        return filteredProducts
+        return products
     # find_one_and_update returns original by default
     # AFTER specifies to return the modified document
