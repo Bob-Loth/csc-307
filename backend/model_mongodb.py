@@ -84,18 +84,24 @@ class Search(Model):
     db_client = pymongo.MongoClient(credentials(), 27017)
     collection = db_client["InventoryDB"]["InventoryColl"]
 
-
+    def get_sorted_limit(self, filter, num_docs):
+        products = list(self.collection.find()
+                        .sort(filter, pymongo.ASCENDING).limit(num_docs))
+        for product in products:
+            product["_id"] = str(product["_id"])
+            product["expiration_date"] = to_ymd(product["expiration_date"])
+        return jsonify(products)
 
     def find_filter(self, keyword, filter_category,
                     price_range, expiration, greaterThan):
 
         # get all products in collection
         query = {}
-        
+
         filteredProducts = []
         today = date.today()
 
-        
+
         # name filter
         # filter based on name if keyword present
         if ('' != keyword):
@@ -107,7 +113,6 @@ class Search(Model):
         # filter based on category if filter is present
         if ('' != filter_category):
             query['category'] = filter_category
-            
 
         # ---------------------------------------
 
@@ -119,7 +124,7 @@ class Search(Model):
             # price, remove product
             if greaterThan:
                 query['price'] = {'$gte': price_range}
-                
+
             # for greater than filters, if product price is below filter
             # price, remove product
             elif not greaterThan:
@@ -128,11 +133,11 @@ class Search(Model):
         # ---------------------------------------
         products = (
             list(self.collection.find(query).
-                collation(Collation(locale='en', 
-                    strength=CollationStrength.SECONDARY))
+                collation(Collation(locale='en',
+                          strength=CollationStrength.SECONDARY))
             )
         )
-        
+
         for product in products:
             # filter based on price range if filter is present
             if '0' != expiration:
@@ -157,7 +162,6 @@ class Search(Model):
                     continue
 
             filteredProducts.append(product)
-        
 
         # last steps
         # Cast to list
