@@ -14,6 +14,7 @@ function SearchFilter() {
     const [exp, setExp] = useState('0')
     const [filterCategory, setCategory] = useState('')
     const [priceRange, setPriceRange] = useState('none')
+    const [stockRange, setStockRange] = useState('none')
 
     const initialState = {
         keyword: '',
@@ -28,7 +29,8 @@ function SearchFilter() {
                                         'keyword': values.keyword,
                                         'expiry': exp,
                                         'filterCategory': filterCategory,
-                                        'priceRange': priceRange,}})
+                                        'priceRange': priceRange,
+                                        'stockRange': stockRange}})
           .then( (resp) => {
                 setProductList(resp.data.products);
             });
@@ -131,6 +133,21 @@ function SearchFilter() {
                             <option value=">50">Above $50</option>
                             <option value=">100">Above $100</option>
                         </select>
+                        Stock Range
+                        <select
+                        value = {stockRange} 
+                        onChange={(e) =>{
+                            
+                            const sr = e.target.value;
+                            setStockRange(sr);
+                            console.log(sr)
+                        }}>
+                            <option value="none">none</option>
+                            <option value="<10">Below 10</option>
+                            <option value="<50">Below 50</option>
+                            <option value=">50">Above 50</option>
+                            <option value=">100">Above 100</option>
+                        </select>
 
                     </div>
                     <br/>
@@ -142,6 +159,7 @@ function SearchFilter() {
                         setPriceRange('none')
                         setCategory('')
                         setExp('0')
+                        setStockRange('none')
                     }}>
                         Clear Filters
                     </Button>

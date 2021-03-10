@@ -97,8 +97,6 @@ def search():
         #  if there is json in the request run this
         search_request = request.args
 
-        print(search_request)
-        print("\n\n")
         if search_request:
             productdb = Search()
 
@@ -106,6 +104,7 @@ def search():
             keyword = search_request.get('keyword')
             filter_category = search_request.get('filterCategory')
             greaterThan = False
+            stockAbove = False
 
             # remove comparison and cast to int
             price_range = search_request.get('priceRange')
@@ -117,16 +116,29 @@ def search():
                 price_range = 0
 
             expiry = search_request.get('expiry')
+
+            # remove comparison and cast to int
+            stock_range = search_request.get('stockRange')
+            if stock_range != 'none':
+                if stock_range[0] == '>':
+                    stockAbove = True
+                stock_range = int(stock_range[1:])
+            else:
+                stock_range = 0
+
+            expiry = search_request.get('expiry')
             #  ------------------------------------
 
             products = productdb.find_filter(keyword, filter_category,
-                                             price_range, expiry, greaterThan)
+                                             price_range, expiry, greaterThan, 
+                                             stockAbove, stock_range)
             return jsonify(products=products)
 
         productdb = Product()
         products = productdb.list_all()
 
         return jsonify(products=products)
+
     if request.method == 'PATCH':
         id = request.args.get("_id")
         productdb = Product()
@@ -136,7 +148,7 @@ def search():
         r_date = str(request.get_json().get('expiration_date'))
         # if it exists in update object, format the date for suitable storage
         # in mongoDB.
-        print("r_Date", r_date)
+        
         if (request.get_json().get('expiration_date')):
             temp_date = datetime.date(int(r_date[0:4]),
                                       int(r_date[5:7]),
