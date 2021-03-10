@@ -92,7 +92,8 @@ class Search(Model):
     # keyword: str | searches items with keyword as substring of item name
     # filter_category: str | searches for items in category
     # price_range: int | sets price comparison argument of price filter
-    # expiration: str | converted to int between 0-2 as number of weeks until expiry
+    # expiration: str | converted to int between 0-2 as number of weeks
+    #     until expiry
     # greaterThan: bool | sets comparison for price_range to search gte
     # stockAbove: bool | sets comparison for stock_range to search gte
     # stock_range: int | sets stock comparison argument of stock filter

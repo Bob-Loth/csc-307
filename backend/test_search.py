@@ -81,10 +81,10 @@ class TestSearch():
         stock_range = 0.0
 
         # search with default / null values
-        products_one = productdb.find_filter(keyword, filter_category, 
-                                            price_range, expiration, 
-                                            greaterThan, stockAbove, 
-                                            stock_range)
+        products_one = productdb.find_filter(keyword, filter_category,
+                                             price_range, expiration,
+                                             greaterThan, stockAbove,
+                                             stock_range)
 
         # assertion checks
         for product in products_one:
@@ -107,11 +107,11 @@ class TestSearch():
         stock_range = 50
 
         # search with above filters
-        products_two = productdb.find_filter(keyword, filter_category, 
-                                            price_range, expiration, 
-                                            greaterThan, stockAbove, 
-                                            stock_range)
-        
+        products_two = productdb.find_filter(keyword, filter_category,
+                                             price_range, expiration,
+                                             greaterThan, stockAbove,
+                                             stock_range)
+
         # assertion checks
         for product in products_two:
             assert 'po' in product['name'].lower()
@@ -129,21 +129,21 @@ class TestSearch():
         stock_range = 0
 
         # search with above filters
-        products_two = productdb.find_filter(keyword, filter_category, 
-                                            price_range, expiration, 
-                                            greaterThan, stockAbove, 
-                                            stock_range)
+        products_two = productdb.find_filter(keyword, filter_category,
+                                             price_range, expiration,
+                                             greaterThan, stockAbove,
+                                             stock_range)
 
         deadline = (datetime.now() +
-                        timedelta(weeks=2)
+                    timedelta(weeks=2)
                     )
-        
+
         # assertion checks
         for product in products_two:
             assert product['price'] <= 30
             expiry = date.fromisoformat(product['expiration_date'])
             assert deadline >= datetime(expiry.year, expiry.month, expiry.day)
-        
+
         # set price range to below 10, stock range above 50
         price_range = 10
         stock_range = 50
@@ -151,10 +151,10 @@ class TestSearch():
         expiration = '0'
 
         # find with filters
-        products_two = productdb.find_filter(keyword, filter_category, 
-                                            price_range, expiration, 
-                                            greaterThan, stockAbove, 
-                                            stock_range)
+        products_two = productdb.find_filter(keyword, filter_category,
+                                             price_range, expiration,
+                                             greaterThan, stockAbove,
+                                             stock_range)
 
         # assertion checks
         for product in products_two:
@@ -167,11 +167,11 @@ class TestSearch():
         stock_range = 0
         stockAbove = False
 
-         # find with filters
-        products_two = productdb.find_filter(keyword, filter_category, 
-                                            price_range, expiration, 
-                                            greaterThan, stockAbove, 
-                                            stock_range)
+        # find with filters
+        products_two = productdb.find_filter(keyword, filter_category,
+                                             price_range, expiration,
+                                             greaterThan, stockAbove,
+                                             stock_range)
 
         # assertion checks
         for product in products_two:
@@ -184,10 +184,10 @@ class TestSearch():
         stockAbove = False
 
         # find with filters
-        products_two = productdb.find_filter(keyword, filter_category, 
-                                            price_range, expiration, 
-                                            greaterThan, stockAbove, 
-                                            stock_range)
+        products_two = productdb.find_filter(keyword, filter_category,
+                                             price_range, expiration,
+                                             greaterThan, stockAbove,
+                                             stock_range)
 
         # assertion checks
         for product in products_two:
