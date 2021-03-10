@@ -3,7 +3,11 @@ from flask import jsonify
 import pymongo
 import json
 from bson.objectid import ObjectId
-from private_credentials import credentials
+try:
+    from private_credentials import credentials
+except ModuleNotFoundError:
+    def credentials():
+        return 'localhost'
 
 
 base_url = 'http://localhost:5000/'
